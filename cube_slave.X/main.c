@@ -164,7 +164,7 @@ void decodage(int n) {
 			led_state[0][a]=0;	
 		}
 
-		if(MASK[a] & stock_led[slave + 1 + 16*n])   
+		if(MASK[a] & stock_led[slave + 1 + 16*n])
 		{                                           
 			led_state[1][a]=1;
 		}

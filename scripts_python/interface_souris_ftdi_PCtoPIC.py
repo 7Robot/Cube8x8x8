@@ -209,13 +209,13 @@ def Envoyer():
 			# Indice pour chaque diode d'une ligne (= d'un PIC)
 			for j in range(colonnes) :
 
-				if  matrice_leds[i+8*k][j] == 1:
+				if  matrice_leds[i-(i%2)+8*k+j//4][(j%4)*((i%2)+1)] == 1:
 					octets_rouges[k][i] = octets_rouges[k][i]+2**j
 
-				elif matrice_leds[i+8*k][j] == 2:                
+				elif matrice_leds[i-(i%2)+8*k+j//4][(j%4)*((i%2)+1)] == 2:                
 					octets_bleus[k][i] = octets_bleus[k][i]+2**j
 
-				elif matrice_leds[i+8*k][j] == 3:
+				elif matrice_leds[i-(i%2)+8*k+j//4][(j%4)*((i%2)+1)] == 3:
 					octets_rouges[k][i] = octets_rouges[k][i]+2**j
 					octets_bleus[k][i] = octets_bleus[k][i]+2**j
 
