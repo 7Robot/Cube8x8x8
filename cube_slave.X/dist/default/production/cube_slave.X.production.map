@@ -5,7 +5,7 @@ Linker command line:
 --edf=/opt/microchip/xc8/v1.33/dat/en_msgs.txt -cs \
   -h+dist/default/production/cube_slave.X.production.sym \
   --cmf=dist/default/production/cube_slave.X.production.cmf -z -Q18F25K80 \
-  -o/tmp/cgtmvBHiw -Mdist/default/production/cube_slave.X.production.map \
+  -o/tmp/cgtiJ2Qqm -Mdist/default/production/cube_slave.X.production.map \
   -E1 -ver=XC8 -ASTACK=0ECh-09ffh -pstack=STACK -ACODE=00h-07FFFh \
   -ACONST=00h-07FFFh -ASMALLCONST=0F00h-0FFFhx113 \
   -AMEDIUMCONST=0F00h-07FFFh -ACOMRAM=01h-05Fh -AABS1=00h-0E40h \
@@ -24,7 +24,7 @@ Linker command line:
   -prdata=COMRAM,nvrram=COMRAM,nvbit=COMRAM,rbss=COMRAM,rbit=COMRAM \
   -pfarbss=FARRAM,fardata=FARRAM,nvFARRAM=FARRAM \
   -pintsave_regs=BIGRAM,bigbss=BIGRAM,bigdata=BIGRAM -pbss=RAM \
-  -pidata=CODE,irdata=CODE,ibigdata=CODE,ifardata=CODE /tmp/cgtEpe12P.obj \
+  -pidata=CODE,irdata=CODE,ibigdata=CODE,ifardata=CODE /tmp/cgtgfg276.obj \
   dist/default/production/cube_slave.X.production.obj 
 
 Object code version is 3.11
@@ -37,24 +37,24 @@ Call graph: (short form)
 
 
                 Name                               Link     Load   Length Selector   Space Scale
-/tmp/cgtEpe12P.obj
+/tmp/cgtgfg276.obj
                 end_init                            166      166        4        C       0
                 reset_vec                             0        0        4        0       0
                 idloc                            200000   200000        8   200000       0
                 config                           300000   300000        E   300000       0
 dist/default/production/cube_slave.X.production.obj
                 intcodelo                            18       18      14E        C       0
-                text4                               274      274       A2        C       0
-                text3                               16A      16A      10A        C       0
-                text2                               316      316       40        C       0
-                text1                               394      394       32        C       0
-                text0                               3C6      3C6       1A        C       0
-                cstackCOMRAM                          1        1       28        1       1
+                text4                               26C      26C       E6        C       0
+                text3                               16A      16A      102        C       0
+                text2                               424      424       40        C       0
+                text1                               464      464       32        C       0
+                text0                               352      352       90        C       0
+                cstackCOMRAM                          1        1       2C        1       1
                 bssBANK0                             60       60       8C       60       1
-                dataCOMRAM                           3E       3E        8        1       1
-                bssCOMRAM                            29       29       15        1       1
-                cinit                               356      356       3E        C       0
-                idataCOMRAM                         3E0      3E0        8        C       0
+                dataCOMRAM                           43       43        8        1       1
+                bssCOMRAM                            2D       2D       16        1       1
+                cinit                               3E2      3E2       42        C       0
+                idataCOMRAM                         496      496        8        C       0
 
 TOTAL           Name                               Link     Load   Length     Space
         CLASS   STACK          
@@ -63,13 +63,13 @@ TOTAL           Name                               Link     Load   Length     Sp
                 end_init                            166      166        4         0
                 intcodelo                            18       18      14E         0
                 reset_vec                             0        0        4         0
-                text4                               274      274       A2         0
-                text3                               16A      16A      10A         0
-                text2                               316      316       40         0
-                text1                               394      394       32         0
-                text0                               3C6      3C6       1A         0
-                cinit                               356      356       3E         0
-                idataCOMRAM                         3E0      3E0        8         0
+                text4                               26C      26C       E6         0
+                text3                               16A      16A      102         0
+                text2                               424      424       40         0
+                text1                               464      464       32         0
+                text0                               352      352       90         0
+                cinit                               3E2      3E2       42         0
+                idataCOMRAM                         496      496        8         0
 
         CLASS   CONST          
 
@@ -78,9 +78,9 @@ TOTAL           Name                               Link     Load   Length     Sp
         CLASS   MEDIUMCONST    
 
         CLASS   COMRAM         
-                cstackCOMRAM                          1        1       28         1
-                dataCOMRAM                           3E       3E        8         1
-                bssCOMRAM                            29       29       15         1
+                cstackCOMRAM                          1        1       2C         1
+                dataCOMRAM                           43       43        8         1
+                bssCOMRAM                            2D       2D       16         1
 
         CLASS   ABS1           
 
@@ -136,8 +136,8 @@ TOTAL           Name                               Link     Load   Length     Sp
 SEGMENTS        Name                           Load    Length   Top    Selector   Space  Class
 
                 reset_vec                      000000  000004  000004         0       0  CODE    
-                cstackCOMRAM                   000001  000045  000046         1       1  COMRAM  
-                intcodelo                      000018  0003D0  0003E8         C       0  CODE    
+                cstackCOMRAM                   000001  00004A  00004B         1       1  COMRAM  
+                intcodelo                      000018  000486  00049E         C       0  CODE    
                 bssBANK0                       000060  00008C  0000EC        60       1  BANK0   
                 idloc                          200000  000008  200008    200000       0  IDLOC   
                 config                         300000  00000E  30000E    300000       0  CONFIG  
@@ -161,13 +161,13 @@ UNUSED ADDRESS RANGES
         BANK7            000700-0007FF              100
         BANK8            000800-0008FF              100
         BANK9            000900-0009FF              100
-        BIGRAM           000046-00005F               1A
+        BIGRAM           00004B-00005F               15
                          0000EC-000E40              D55
         CODE             000004-000017               14
-                         0003E8-007FFF             7C18
-        COMRAM           000046-00005F               1A
+                         00049E-007FFF             7B62
+        COMRAM           00004B-00005F               15
         CONST            000004-000017               14
-                         0003E8-007FFF             7C18
+                         00049E-007FFF             7B62
         EEDATA           F00000-F003FF              400
         MEDIUMCONST      000F00-007FFF             7100
         RAM              0000EC-000E40              100
@@ -182,7 +182,7 @@ _ANCON0                  (abs)        000F5D
 _BAUDCON2bits            (abs)        000FB9
 _GIE                     (abs)        007F97
 _INTCON                  (abs)        000FF2
-_MASK                    dataCOMRAM   00003E
+_MASK                    dataCOMRAM   000043
 _OSCCON                  (abs)        000FD3
 _OSCTUNEbits             (abs)        000F9B
 _PEIE                    (abs)        007F96
@@ -402,29 +402,29 @@ ___inthi_sp              stack        000000
 ___intlo_sp              stack        000000
 ___sp                    stack        000000
 __accesstop              (abs)        000060
-__activetblptr           (abs)        000000
-__end_of__initialization cinit        00038E
-__end_of_affichage       text4        000316
-__end_of_decodage        text3        000274
+__activetblptr           (abs)        000002
+__end_of__initialization cinit        00041A
+__end_of_affichage       text4        000352
+__end_of_decodage        text3        00026C
 __end_of_high_isr        intcodelo    0000D6
-__end_of_initComms       text2        000356
-__end_of_initPorts       text1        0003C6
-__end_of_main            text0        0003E0
+__end_of_initComms       text2        000464
+__end_of_initPorts       text1        000496
+__end_of_main            text0        0003E2
 __end_of_timer_isr       intcodelo    000166
-__initialization         cinit        000356
+__initialization         cinit        0003E2
 __mediumconst            mediumconst  000000
 __pbssBANK0              bssBANK0     000060
-__pbssCOMRAM             bssCOMRAM    000029
-__pcinit                 cinit        000356
+__pbssCOMRAM             bssCOMRAM    00002D
+__pcinit                 cinit        0003E2
 __pcstackCOMRAM          cstackCOMRAM 000001
-__pdataCOMRAM            dataCOMRAM   00003E
-__pidataCOMRAM           idataCOMRAM  0003E0
+__pdataCOMRAM            dataCOMRAM   000043
+__pidataCOMRAM           idataCOMRAM  000496
 __pintcodelo             intcodelo    000018
-__ptext0                 text0        0003C6
-__ptext1                 text1        000394
-__ptext2                 text2        000316
+__ptext0                 text0        000352
+__ptext1                 text1        000464
+__ptext2                 text2        000424
 __ptext3                 text3        00016A
-__ptext4                 text4        000274
+__ptext4                 text4        00026C
 __ramtop                 ramtop       000F00
 __size_of_affichage      (abs)        000000
 __size_of_decodage       (abs)        000000
@@ -434,41 +434,43 @@ __size_of_initPorts      (abs)        000000
 __size_of_main           (abs)        000000
 __size_of_timer_isr      (abs)        000000
 __smallconst             smallconst   000000
-_affichage               text4        000274
-_compteur                bssCOMRAM    000039
-_compteur_clock          bssCOMRAM    00003B
+_affichage               text4        00026C
+_compteur                bssCOMRAM    00003D
+_compteur_clock          bssCOMRAM    00003F
 _decodage                text3        00016A
 _high_isr                intcodelo    000018
-_initComms               text2        000316
-_initPorts               text1        000394
-_led_state               bssCOMRAM    000029
-_main                    text0        0003C6
-_state_clock             bssCOMRAM    00003C
+_initComms               text2        000424
+_initPorts               text1        000464
+_led_state               bssCOMRAM    00002D
+_main                    text0        000352
+_mux                     bssCOMRAM    000040
+_state_clock             bssCOMRAM    000041
 _stock_led               bssBANK0     000060
-_tampon                  bssCOMRAM    00003D
+_tampon                  bssCOMRAM    000042
 _timer_isr               intcodelo    0000D6
 decodage@a               cstackCOMRAM 000028
 decodage@n               cstackCOMRAM 000023
-end_of_initialization    cinit        00038E
+end_of_initialization    cinit        00041A
 intlevel0                text         000000
 intlevel1                text         000000
 intlevel2                text         000000
 intlevel3                text         000000
+main@i                   cstackCOMRAM 000029
 stackhi                  (abs)        0009FF
 stacklo                  (abs)        0000EC
 start                    init         000166
-start_initialization     cinit        000356
+start_initialization     cinit        0003E2
 
 
 FUNCTION INFORMATION:
 
  *************** function _main *****************
  Defined at:
-		line 139 in file "main.c"
+		line 138 in file "main.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
-		None
+  i               4   40[COMRAM] long 
  Return value:  Size  Location     Type
 		None               void
  Registers used:
@@ -479,10 +481,10 @@ FUNCTION INFORMATION:
 		Unchanged: 
  Data sizes:     COMRAM   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12  BANK13  BANK14
       Params:         0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Locals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         4       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0
       Temps:          0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Totals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0
-Total ram usage:        0 bytes
+      Totals:         4       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        4 bytes
  Hardware stack levels required when called:    2
  This function calls:
 		_affichage
@@ -556,7 +558,7 @@ Total ram usage:        0 bytes
 
  *************** function _decodage *****************
  Defined at:
-		line 155 in file "main.c"
+		line 160 in file "main.c"
  Parameters:    Size  Location     Type
   n               2   34[COMRAM] int 
  Auto vars:     Size  Location     Type
@@ -586,7 +588,7 @@ Total ram usage:        6 bytes
 
  *************** function _affichage *****************
  Defined at:
-		line 191 in file "main.c"
+		line 190 in file "main.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -594,7 +596,7 @@ Total ram usage:        6 bytes
  Return value:  Size  Location     Type
 		None               void
  Registers used:
-		None
+		wreg, status,2, status,0
  Tracked objects:
 		On entry : 
 		On exit  : 
@@ -616,7 +618,7 @@ Total ram usage:        0 bytes
 
  *************** function _high_isr *****************
  Defined at:
-		line 114 in file "main.c"
+		line 115 in file "main.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -677,26 +679,26 @@ MODULE INFORMATION
 
 Module		Function		Class		Link	Load	Size
 usart.c
-		_initComms     		CODE           	0316	0000	64
+		_initComms     		CODE           	0424	0000	64
 
 usart.c estimated size: 64
 
 port.c
-		_initPorts     		CODE           	0394	0000	50
+		_initPorts     		CODE           	0464	0000	50
 
 port.c estimated size: 50
 
 shared
-		__initializatio		CODE           	0356	0000	56
+		__initializatio		CODE           	03E2	0000	56
 
 shared estimated size: 56
 
 main.c
-		_affichage     		CODE           	0274	0000	162
-		_main          		CODE           	03C6	0000	26
+		_affichage     		CODE           	026C	0000	230
+		_main          		CODE           	0352	0000	144
 		_high_isr      		CODE           	0018	0000	190
 		_timer_isr     		CODE           	00D6	0000	144
-		_decodage      		CODE           	016A	0000	266
+		_decodage      		CODE           	016A	0000	258
 
-main.c estimated size: 788
+main.c estimated size: 966
 

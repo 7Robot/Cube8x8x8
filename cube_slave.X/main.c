@@ -79,7 +79,7 @@
 
 // DEFINE LIST
 
-#define slave 1
+#define slave 0
 
 #define ledB1 PORTAbits.RA0
 #define ledB2 PORTAbits.RA3
@@ -104,107 +104,142 @@
 
 
 char tampon = 0;
-char MASK[8]={0b10000000 , 0b01000000, 0b00100000, 0b00010000, 0b00001000, 0b00000100, 0b00000010, 0b00000001};
+char MASK[8] = {0b10000000, 0b01000000, 0b00100000, 0b00010000, 0b00001000, 0b00000100, 0b00000010, 0b00000001};
 char stock_led[140] = 0;
 int compteur = 0;
 char compteur_clock = 0;
 char state_clock = 0;
 char led_state[2][8] = 0; // Ligne 0 : Bleu, Ligne 1 : Rouge
+char mux = 0;
 
 void interrupt low_priority high_isr(void) {
-	if (RC2IF) {
-		tampon = RCREG2;                //a chaque interruption
-		if (compteur == 128) {          //on stock la valeur de
-                    compteur = 0;               //RCREG2 dans un tableau
-		}
-		stock_led[compteur] = tampon;
-		compteur++;
-	}
-	RC2IF = 0; // On met le flag ра 0
+    if (RC2IF) {
+        tampon = RCREG2; //a chaque interruption
+        if (compteur == 128) { //on stock la valeur de
+            compteur = 0; //RCREG2 dans un tableau
+        }
+        stock_led[compteur] = tampon;
+        compteur++;
+    }
+    RC2IF = 0; // On met le flag ра 0
 }
 
-
 void interrupt low_priority timer_isr(void) {
-	// Check for overflow of TMR0
-	if ( TMR0IE && TMR0IF ) {
-	}
-	TMR0IF = 0;
+    // Check for overflow of TMR0
+    if (TMR0IE && TMR0IF) {
+    }
+    TMR0IF = 0;
 }
 
 void decodage(int);
 void init_timer(void);
 void affichage();
 
-
 void main(void) {
-	// unsigned char address = 0;
-	// char msg1[80] = "Slave Ready \n \r";
+    // unsigned char address = 0;
+    // char msg1[80] = "Slave Ready \n \r";
+    long i = 0;
+    initPorts(); // Initialize ports to startup state
+    initComms(); // Initialize the serial port
 
-	initPorts(); // Initialize ports to startup state
-	initComms(); // Initialize the serial port
 
+    while (1) {
+        decodage(0);
 
-	while (1) {
-            decodage(0);
+        for (mux = 0; mux < 4; mux++) {
             affichage();
-	}
+
+            for (i = 0; i < 1000000; i++) {
+            }
+
+        }
+    }
 
 }
-
 
 void decodage(int n) {
-	char a=0;
-	for (a=0; a<8;a++)
-	{
-		if(MASK[a] & stock_led[2*slave + 16*n])       //n numero de l'etage [0;7]
-		{
-			led_state[0][a]=1;
-		}
-		else {
-			led_state[0][a]=0;
-		}
+    char a = 0;
+    for (a = 0; a < 8; a++) {
+        if (MASK[a] & stock_led[2 * slave + 16 * n]) //n numero de l'etage [0;7]
+        {
+            led_state[0][a] = 1;
+        } else {
+            led_state[0][a] = 0;
+        }
 
-		if(MASK[a] & stock_led[2*slave + 1 + 16*n])
-		{           
-			led_state[1][a]=1;
-		}
-		else {
-			led_state[1][a]=0;	
-		}
-	}
+        if (MASK[a] & stock_led[2 * slave + 1 + 16 * n]) {
+            led_state[1][a] = 1;
+        } else {
+            led_state[1][a] = 0;
+        }
+    }
 }
-
 
 void init_timer(void) {
-//	Setup Timer0		T0PS0 = 0; //Prescaler is divide by 256
-//	T0PS1 = 1;
-//	T0PS2 = 0;
-//	PSA = 0; //Timer Clock Source is from Prescaler
-//	T0CS = 0; //Prescaler gets clock from FCPU
-//	T08BIT = 1; //8 BIT MODE
-//	TMR0IE = 1; //Enable TIMER0 Interrupt
-//	PEIE = 1; //Enable Peripheral Interrupt
-//	GIE = 1; //Enable INTs globally
+    //	Setup Timer0		T0PS0 = 0; //Prescaler is divide by 256
+    //	T0PS1 = 1;
+    //	T0PS2 = 0;
+    //	PSA = 0; //Timer Clock Source is from Prescaler
+    //	T0CS = 0; //Prescaler gets clock from FCPU
+    //	T08BIT = 1; //8 BIT MODE
+    //	TMR0IE = 1; //Enable TIMER0 Interrupt
+    //	PEIE = 1; //Enable Peripheral Interrupt
+    //	GIE = 1; //Enable INTs globally
 }
 
-
 void affichage() {
-    ledB1 = led_state[0][0];
-    ledB2 = led_state[0][1];
-    ledB3 = led_state[0][2];
-    ledB4 = led_state[0][3];
-    ledB5 = led_state[0][4];
-    ledB6 = led_state[0][5];
-    ledB7 = led_state[0][6];
-    ledB8 = led_state[0][7];
 
-    ledR1 = led_state[1][0];
-    ledR2 = led_state[1][1];
-    ledR3 = led_state[1][2];
-    ledR4 = led_state[1][3];
-    ledR5 = led_state[1][4];
-    ledR6 = led_state[1][5];
-    ledR7 = led_state[1][6];
-    ledR8 = led_state[1][7];
-    
+    ledB1 = 0;
+    ledB2 = 0;
+    ledB3 = 0;
+    ledB4 = 0;
+    ledB5 = 0;
+    ledB6 = 0;
+    ledB7 = 0;
+    ledB8 = 0;
+
+    ledR1 = 0;
+    ledR2 = 0;
+    ledR3 = 0;
+    ledR4 = 0;
+    ledR5 = 0;
+    ledR6 = 0;
+    ledR7 = 0;
+    ledR8 = 0;
+
+    switch (mux) {
+
+        case 0:
+            ledB1 = led_state[0][0];
+            ledB2 = led_state[0][1];
+            ledB3 = led_state[0][2];
+            ledB4 = led_state[0][3];
+            break;
+        case 1:
+
+            ledB5 = led_state[0][4];
+            ledB6 = led_state[0][5];
+            ledB7 = led_state[0][6];
+            ledB8 = led_state[0][7];
+
+            break;
+
+        case 2:
+            ledR1 = led_state[1][0];
+            ledR2 = led_state[1][1];
+            ledR3 = led_state[1][2];
+            ledR4 = led_state[1][3];
+            break;
+
+        case 3:
+
+            ledR5 = led_state[1][4];
+            ledR6 = led_state[1][5];
+            ledR7 = led_state[1][6];
+            ledR8 = led_state[1][7];
+            break;
+
+    }
+
+
 }

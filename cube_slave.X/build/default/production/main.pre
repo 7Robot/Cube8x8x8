@@ -21970,12 +21970,13 @@ void writeDataToUART(char);
 
 # 106
 char tampon = 0;
-char MASK[8]={0b10000000 , 0b01000000, 0b00100000, 0b00010000, 0b00001000, 0b00000100, 0b00000010, 0b00000001};
+char MASK[8] = {0b10000000, 0b01000000, 0b00100000, 0b00010000, 0b00001000, 0b00000100, 0b00000010, 0b00000001};
 char stock_led[140] = 0;
 int compteur = 0;
 char compteur_clock = 0;
 char state_clock = 0;
 char led_state[2][8] = 0;
+char mux = 0;
 
 void interrupt low_priority high_isr(void) {
 if (RC2IF) {
@@ -21989,10 +21990,9 @@ compteur++;
 RC2IF = 0;
 }
 
-
 void interrupt low_priority timer_isr(void) {
 
-if ( TMR0IE && TMR0IF ) {
+if (TMR0IE && TMR0IF) {
 }
 TMR0IF = 0;
 }
@@ -22001,69 +22001,104 @@ void decodage(int);
 void init_timer(void);
 void affichage();
 
-
 void main(void) {
 
 
-
+long i = 0;
 initPorts();
 initComms();
 
 
 while (1) {
 decodage(0);
+
+for (mux = 0; mux < 4; mux++) {
 affichage();
+
+for (i = 0; i < 1000000; i++) {
 }
 
 }
+}
 
+}
 
 void decodage(int n) {
-char a=0;
-for (a=0; a<8;a++)
+char a = 0;
+for (a = 0; a < 8; a++) {
+if (MASK[a] & stock_led[2 * 0 + 16 * n])
 {
-if(MASK[a] & stock_led[2*1 + 16*n])
-{
-led_state[0][a]=1;
-}
-else {
-led_state[0][a]=0;
+led_state[0][a] = 1;
+} else {
+led_state[0][a] = 0;
 }
 
-if(MASK[a] & stock_led[2*1 + 1 + 16*n])
-{
-led_state[1][a]=1;
-}
-else {
-led_state[1][a]=0;
+if (MASK[a] & stock_led[2 * 0 + 1 + 16 * n]) {
+led_state[1][a] = 1;
+} else {
+led_state[1][a] = 0;
 }
 }
 }
-
 
 void init_timer(void) {
 
 # 188
 }
 
-
 void affichage() {
+
+PORTAbits.RA0 = 0;
+PORTAbits.RA3 = 0;
+PORTAbits.RA6 = 0;
+PORTCbits.RC3 = 0;
+PORTBbits.RB5 = 0;
+PORTBbits.RB3 = 0;
+PORTBbits.RB0 = 0;
+PORTCbits.RC5 = 0;
+
+PORTAbits.RA1 = 0;
+PORTAbits.RA2 = 0;
+PORTCbits.RC0 = 0;
+PORTCbits.RC2 = 0;
+PORTBbits.RB4 = 0;
+PORTBbits.RB2 = 0;
+PORTCbits.RC6 = 0;
+PORTCbits.RC4 = 0;
+
+switch (mux) {
+
+case 0:
 PORTAbits.RA0 = led_state[0][0];
 PORTAbits.RA3 = led_state[0][1];
 PORTAbits.RA6 = led_state[0][2];
 PORTCbits.RC3 = led_state[0][3];
+break;
+case 1:
+
 PORTBbits.RB5 = led_state[0][4];
 PORTBbits.RB3 = led_state[0][5];
 PORTBbits.RB0 = led_state[0][6];
 PORTCbits.RC5 = led_state[0][7];
 
+break;
+
+case 2:
 PORTAbits.RA1 = led_state[1][0];
 PORTAbits.RA2 = led_state[1][1];
 PORTCbits.RC0 = led_state[1][2];
 PORTCbits.RC2 = led_state[1][3];
+break;
+
+case 3:
+
 PORTBbits.RB4 = led_state[1][4];
 PORTBbits.RB2 = led_state[1][5];
 PORTCbits.RC6 = led_state[1][6];
 PORTCbits.RC4 = led_state[1][7];
+break;
+
+}
+
 
 }
