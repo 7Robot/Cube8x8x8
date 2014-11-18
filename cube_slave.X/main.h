@@ -16,3 +16,6 @@
 #define ON            	    1
 #define OFF                 0
 
+void decodage(int);
+void init_timer(void);
+void affichage();

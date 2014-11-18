@@ -85,16 +85,16 @@
 #define ledB2 PORTAbits.RA3
 #define ledB3 PORTAbits.RA6
 #define ledB4 PORTCbits.RC3
-#define ledB5 PORTBbits.RB5
+#define ledB5 PORTCbits.RC7
 #define ledB6 PORTBbits.RB3
-#define ledB7 PORTBbits.RB0
+#define ledB7 PORTAbits.RA7
 #define ledB8 PORTCbits.RC5
 
 #define ledR1 PORTAbits.RA1
 #define ledR2 PORTAbits.RA2
 #define ledR3 PORTCbits.RC0
 #define ledR4 PORTCbits.RC2
-#define ledR5 PORTBbits.RB4
+#define ledR5 PORTCbits.RC1
 #define ledR6 PORTBbits.RB2
 #define ledR7 PORTCbits.RC6
 #define ledR8 PORTCbits.RC4
@@ -110,7 +110,6 @@ int compteur = 0;
 char compteur_clock = 0;
 char state_clock = 0;
 char led_state[2][8] = 0; // Ligne 0 : Bleu, Ligne 1 : Rouge
-char mux = 0;
 
 void interrupt low_priority high_isr(void) {
     if (RC2IF) {
@@ -131,31 +130,20 @@ void interrupt low_priority timer_isr(void) {
     TMR0IF = 0;
 }
 
-void decodage(int);
-void init_timer(void);
-void affichage();
-
 void main(void) {
     // unsigned char address = 0;
     // char msg1[80] = "Slave Ready \n \r";
-    long i = 0;
     initPorts(); // Initialize ports to startup state
     initComms(); // Initialize the serial port
-
-
+    int i = 0;
+    char mux = 0;
     while (1) {
+        
         decodage(0);
-
-        for (mux = 0; mux < 4; mux++) {
-            affichage();
-
-            for (i = 0; i < 100; i++) {
-            }
-
-        }
+        affichage();
     }
-
 }
+
 
 void decodage(int n) {
     char a = 0;
@@ -188,55 +176,21 @@ void init_timer(void) {
 }
 
 void affichage() {
-    int d;
-    ledB1 = 0;for (d = 0; d < 1; d++) {}
-    ledB2 = 0;for (d = 0; d < 1; d++) {}
-    ledB3 = 0;for (d = 0; d < 1; d++) {}
-    ledB4 = 0;for (d = 0; d < 1; d++) {}
-    ledB5 = 0;for (d = 0; d < 1; d++) {}
-    ledB6 = 0;for (d = 0; d < 1; d++) {}
-    ledB7 = 0;for (d = 0; d < 1; d++) {}
-    ledB8 = 0;for (d = 0; d < 1; d++) {}
+        ledB1 = led_state[0][0];
+        ledB2 = led_state[0][1];
+        ledB3 = led_state[0][2];
+        ledB4 = led_state[0][3];
+        ledB5 = led_state[0][4];
+        ledB6 = led_state[0][5];
+        ledB7 = led_state[0][6];
+        ledB8 = led_state[0][7];
 
-    ledR1 = 0;for (d = 0; d < 1; d++) {}
-    ledR2 = 0;for (d = 0; d < 1; d++) {}
-    ledR3 = 0;for (d = 0; d < 1; d++) {}
-    ledR4 = 0;for (d = 0; d < 1; d++) {}
-    ledR5 = 0;for (d = 0; d < 1; d++) {}
-    ledR6 = 0;for (d = 0; d < 1; d++) {}
-    ledR7 = 0;for (d = 0; d < 1; d++) {}
-    ledR8 = 0;for (d = 0; d < 1; d++) {}
-
-    switch (mux) {
-
-        case 0:
-            ledB1 = led_state[0][0];
-            ledB2 = led_state[0][1];
-            ledB3 = led_state[0][2];
-            ledB4 = led_state[0][3];
-            break;
-        case 1:
-
-            ledB5 = led_state[0][4];
-            ledB6 = led_state[0][5];
-            ledB7 = led_state[0][6];
-            ledB8 = led_state[0][7];
-            break;
-
-        case 2:
-            ledR1 = led_state[1][0];
-            ledR2 = led_state[1][1];
-            ledR3 = led_state[1][2];
-            ledR4 = led_state[1][3];
-            break;
-
-        case 3:
-
-            ledR5 = led_state[1][4];
-            ledR6 = led_state[1][5];
-            ledR7 = led_state[1][6];
-            ledR8 = led_state[1][7];
-            break;
-
-    }
+        ledR1 = led_state[1][0];
+        ledR2 = led_state[1][1];
+        ledR3 = led_state[1][2];
+        ledR4 = led_state[1][3];
+        ledR5 = led_state[1][4];
+        ledR6 = led_state[1][5];
+        ledR7 = led_state[1][6];
+        ledR8 = led_state[1][7];
 }

@@ -17423,6 +17423,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;usart.h: 4: void initComms();
 [; ;usart.h: 5: void writeStringToUART (const char* msg);
 [; ;usart.h: 6: void writeDataToUART(char);
+[; ;main.h: 19: void decodage(int);
+[; ;main.h: 20: void init_timer(void);
+[; ;main.h: 21: void affichage(char);
 "6 port.c
 [v _initPorts `(v ~T0 @X0 1 ef ]
 {

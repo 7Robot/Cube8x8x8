@@ -21906,6 +21906,11 @@ void initComms();
 void writeStringToUART (const char* msg);
 void writeDataToUART(char);
 
+# 19 "main.h"
+void decodage(int);
+void init_timer(void);
+void affichage(char);
+
 # 6 "usart.c"
 void initComms()
 {
