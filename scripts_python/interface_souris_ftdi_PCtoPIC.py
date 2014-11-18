@@ -84,17 +84,17 @@ class Envoi_Trame(Thread):
 							logs.seek(8*i+j+64*k,0)
 							if logs.read(1) == "%s" %couleur_pixel :
 								matrice_leds[i+8*k][j]=couleur_pixel
-			
-			numPattern+=1
-			if numPattern==liste_trame.size()//2:
-				numPattern=0
 
 
 			Envoyer()
 
 			# On attend le bon délai entre deux patterns
-			delaistring=liste_trame.get(2*(numPattern//2)+1)
+			delaistring=liste_trame.get(2*numPattern+1)
 			sleep(int(delaistring[1:len(delaistring)-4])/1000)
+
+			numPattern+=1
+			if numPattern==liste_trame.size()//2:
+				numPattern=0
 
 		print ("Terminé !")
 
@@ -208,21 +208,24 @@ def Envoyer():
 		for i in range(lignes) :
 			# Indice pour chaque diode d'une ligne (= d'un PIC)
 			for j in range(colonnes) :
-
-				if (i%2==0 & (j//4)%2==1):
-					i+=1
-					j-=4
-				elif (i%2==1 & (j//4)%2==0):
-					i-=1
-					j+=4
-
-				if  matrice_leds[i+8*k][j] == 1:
+				
+				if i%2==0 and (j//4)%2==1:
+					l=1
+					c=-4
+				elif i%2==1 and (j//4)%2==0:
+					l=-1
+					c=4
+				else:
+					l=0
+					c=0
+				
+				if  matrice_leds[i+l+8*k][j+c] == 1:
 					octets_rouges[k][i] = octets_rouges[k][i]+2**j
 
-				elif matrice_leds[i+8*k][j] == 2:                
+				elif matrice_leds[i+l+8*k][j+c] == 2:                
 					octets_bleus[k][i] = octets_bleus[k][i]+2**j
 
-				elif matrice_leds[i+8*k][j] == 3:
+				elif matrice_leds[i+l+8*k][j+c] == 3:
 					octets_rouges[k][i] = octets_rouges[k][i]+2**j
 					octets_bleus[k][i] = octets_bleus[k][i]+2**j
 

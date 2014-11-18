@@ -7,6 +7,7 @@ from pylibftdi import Device
 
 with Device (mode = 't') as dev:
 	dev.baudrate = 115200
-	dev.write('test')
+	dev.write(chr(255))
+	dev.write(chr(255))
 		
 	
