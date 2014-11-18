@@ -79,32 +79,32 @@
 
 // DEFINE LIST
 
-#define slave 0
+#define slave 1
 
-#define ledB8 PORTAbits.RA0
-#define ledB7 PORTAbits.RA3
-#define ledB6 PORTAbits.RA6
-#define ledB5 PORTCbits.RC3
-#define ledB4 PORTBbits.RB5
-#define ledB3 PORTBbits.RB3
-#define ledB2 PORTBbits.RB0
-#define ledB1 PORTCbits.RC5
+#define ledB1 PORTAbits.RA0
+#define ledB2 PORTAbits.RA3
+#define ledB3 PORTAbits.RA6
+#define ledB4 PORTCbits.RC3
+#define ledB5 PORTBbits.RB5
+#define ledB6 PORTBbits.RB3
+#define ledB7 PORTBbits.RB0
+#define ledB8 PORTCbits.RC5
 
-#define ledR8 PORTAbits.RA1
-#define ledR7 PORTAbits.RA2
-#define ledR6 PORTCbits.RC0
-#define ledR5 PORTCbits.RC2
-#define ledR4 PORTBbits.RB4
-#define ledR3 PORTBbits.RB2
-#define ledR2 PORTCbits.RC6
-#define ledR1 PORTCbits.RC4
+#define ledR1 PORTAbits.RA1
+#define ledR2 PORTAbits.RA2
+#define ledR3 PORTCbits.RC0
+#define ledR4 PORTCbits.RC2
+#define ledR5 PORTBbits.RB4
+#define ledR6 PORTBbits.RB2
+#define ledR7 PORTCbits.RC6
+#define ledR8 PORTCbits.RC4
 
 
 #define clock PORTBbits.RB1
 
 
 char tampon = 0;
-char MASK[8]={0b00000001 , 0b00000010, 0b00000100, 0b00001000, 0b00010000, 0b00100000, 0b01000000, 0b10000000};
+char MASK[8]={0b10000000 , 0b01000000, 0b00100000, 0b00010000, 0b00001000, 0b00000100, 0b00000010, 0b00000001};
 char stock_led[140] = 0;
 int compteur = 0;
 char compteur_clock = 0;
@@ -156,16 +156,16 @@ void decodage(int n) {
 	char a=0;
 	for (a=0; a<8;a++)
 	{
-		if(MASK[a] & stock_led[slave + 16*n])       //n numero de l'etage [0;7]
-		{                                           
-			led_state[0][a]=1;	
+		if(MASK[a] & stock_led[2*slave + 16*n])       //n numero de l'etage [0;7]
+		{
+			led_state[0][a]=1;
 		}
 		else {
-			led_state[0][a]=0;	
+			led_state[0][a]=0;
 		}
 
-		if(MASK[a] & stock_led[slave + 1 + 16*n])
-		{                                           
+		if(MASK[a] & stock_led[2*slave + 1 + 16*n])
+		{           
 			led_state[1][a]=1;
 		}
 		else {

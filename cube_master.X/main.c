@@ -79,14 +79,14 @@
 
 
 // DEFINE LISTE
-#define mux1   PORTCbits.RC7
-#define mux2   PORTCbits.RC6
-#define mux3   PORTCbits.RC5
-#define mux4   PORTCbits.RC4
-#define mux5   PORTCbits.RC0
-#define mux6   PORTCbits.RC1
-#define mux7   PORTCbits.RC2
-#define mux8   PORTCbits.RC3
+#define etage0   PORTCbits.RC0
+#define etage1   PORTCbits.RC1
+#define etage2   PORTCbits.RC2
+#define etage3   PORTCbits.RC3
+#define etage4   PORTCbits.RC4
+#define etage5   PORTCbits.RC5
+#define etage6   PORTCbits.RC6
+#define etage7   PORTCbits.RC7
 
 #define clock  PORTAbits.RA0
 
@@ -133,13 +133,8 @@ void main(void) {
     while (1) {
         for (i = 0; i < 8; i++) {
             multiplexeur(i);
-            clock = 1;
-            for (j = 0; j < 100; j++) {
-            }
-            clock = 0;
             for (j = 0; j < 10000; j++) {
-
-            }
+            }      
         }
         
 
@@ -147,46 +142,46 @@ void main(void) {
 }
 
 void multiplexeur(char n) {
-    mux1 = 0;
-    mux2 = 0;
-    mux3 = 0;
-    mux4 = 0;
-    mux5 = 0;
-    mux6 = 0;
-    mux7 = 0;
-    mux8 = 0;
+    etage0 = 0;
+    etage1 = 0;
+    etage2 = 0;
+    etage3 = 0;
+    etage4 = 0;
+    etage5 = 0;
+    etage6 = 0;
+    etage7 = 0;
 
     switch (n) {
         case 0:
-            mux1 = 1;
+            etage0 = 1;
             break;
 
         case 1:
-            mux2 = 1;
+            etage1 = 1;
             break;
 
         case 2:
-            mux3 = 1;
+            etage2 = 1;
             break;
 
         case 3:
-            mux4 = 1;
+            etage3 = 1;
             break;
 
         case 4:
-            mux5 = 1;
+            etage4 = 1;
             break;
 
         case 5:
-            mux6 = 1;
+            etage5 = 1;
             break;
 
         case 6:
-            mux7 = 1;
+            etage6 = 1;
             break;
 
         case 7:
-            mux8 = 1;
+            etage7 = 1;
             break;
 
     }
