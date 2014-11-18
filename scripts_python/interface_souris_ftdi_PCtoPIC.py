@@ -554,6 +554,9 @@ Fleche_bas.grid(row=3, column=2)
 photo_flechebas = PhotoImage(file="fleche_bas.png")
 Fleche_bas.create_image(0, 0, image=photo_flechebas, anchor=NW)
 
+#Fleche_haut.bind('<Button-1>', fonction)
+#Fleche_bas.bind('<Button-1>', fonction)
+
 Button(Gestion_Trames, text ='Delai :', command = Modif_Delai, width=7).grid(row=4, column=0, pady=5)
 delai_field= Entry(Gestion_Trames, width=9)
 delai_field.grid(row=4, column=1, pady=5)
