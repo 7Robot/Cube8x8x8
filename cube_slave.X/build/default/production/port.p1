@@ -17462,9 +17462,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;port.c: 28: PEIE = 1;
 "28
 [e = _PEIE -> -> 1 `i `b ]
-[; ;port.c: 29: INTCON =0b11111000;
+[; ;port.c: 29: INTCON =0b11100000;
 "29
-[e = _INTCON -> -> 248 `i `uc ]
+[e = _INTCON -> -> 224 `i `uc ]
 [; ;port.c: 30: OSCTUNEbits.PLLEN = 1;
 "30
 [e = . . _OSCTUNEbits 0 1 -> -> 1 `i `uc ]

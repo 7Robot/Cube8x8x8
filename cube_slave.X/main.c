@@ -149,7 +149,7 @@ void main(void) {
         for (mux = 0; mux < 4; mux++) {
             affichage();
 
-            for (i = 0; i < 1000000; i++) {
+            for (i = 0; i < 100; i++) {
             }
 
         }
@@ -188,24 +188,24 @@ void init_timer(void) {
 }
 
 void affichage() {
+    int d;
+    ledB1 = 0;for (d = 0; d < 1; d++) {}
+    ledB2 = 0;for (d = 0; d < 1; d++) {}
+    ledB3 = 0;for (d = 0; d < 1; d++) {}
+    ledB4 = 0;for (d = 0; d < 1; d++) {}
+    ledB5 = 0;for (d = 0; d < 1; d++) {}
+    ledB6 = 0;for (d = 0; d < 1; d++) {}
+    ledB7 = 0;for (d = 0; d < 1; d++) {}
+    ledB8 = 0;for (d = 0; d < 1; d++) {}
 
-    ledB1 = 0;
-    ledB2 = 0;
-    ledB3 = 0;
-    ledB4 = 0;
-    ledB5 = 0;
-    ledB6 = 0;
-    ledB7 = 0;
-    ledB8 = 0;
-
-    ledR1 = 0;
-    ledR2 = 0;
-    ledR3 = 0;
-    ledR4 = 0;
-    ledR5 = 0;
-    ledR6 = 0;
-    ledR7 = 0;
-    ledR8 = 0;
+    ledR1 = 0;for (d = 0; d < 1; d++) {}
+    ledR2 = 0;for (d = 0; d < 1; d++) {}
+    ledR3 = 0;for (d = 0; d < 1; d++) {}
+    ledR4 = 0;for (d = 0; d < 1; d++) {}
+    ledR5 = 0;for (d = 0; d < 1; d++) {}
+    ledR6 = 0;for (d = 0; d < 1; d++) {}
+    ledR7 = 0;for (d = 0; d < 1; d++) {}
+    ledR8 = 0;for (d = 0; d < 1; d++) {}
 
     switch (mux) {
 
@@ -221,7 +221,6 @@ void affichage() {
             ledB6 = led_state[0][5];
             ledB7 = led_state[0][6];
             ledB8 = led_state[0][7];
-
             break;
 
         case 2:
@@ -240,6 +239,4 @@ void affichage() {
             break;
 
     }
-
-
 }
