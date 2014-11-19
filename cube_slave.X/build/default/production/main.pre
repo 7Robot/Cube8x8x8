@@ -21973,7 +21973,7 @@ void affichage();
 
 #pragma config EBTRB = 0
 
-# 106
+# 104
 char tampon = 0;
 char MASK[8] = {0b10000000, 0b01000000, 0b00100000, 0b00010000, 0b00001000, 0b00000100, 0b00000010, 0b00000001};
 char stock_led[140] = 0;
@@ -22006,8 +22006,6 @@ void main(void) {
 
 initPorts();
 initComms();
-int i = 0;
-char mux = 0;
 while (1) {
 
 decodage();
@@ -22036,7 +22034,7 @@ led_state[1][a] = 0;
 
 void init_timer(void) {
 
-# 176
+# 172
 }
 
 void affichage() {

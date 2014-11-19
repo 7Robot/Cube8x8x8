@@ -100,12 +100,10 @@
 #define ledR8 PORTCbits.RC4
 
 
-#define clock PORTBbits.RB1
-
 
 char tampon = 0;
 char MASK[8] = {0b10000000, 0b01000000, 0b00100000, 0b00010000, 0b00001000, 0b00000100, 0b00000010, 0b00000001};
-char stock_led[20] = 0;
+char stock_led[140] = 0;
 int compteur = 0;
 char compteur_clock = 0;
 char state_clock = 0;
@@ -114,7 +112,7 @@ char led_state[2][8] = 0; // Ligne 0 : Bleu, Ligne 1 : Rouge
 void interrupt low_priority high_isr(void) {
     if (RC2IF) {
         tampon = RCREG2; //a chaque interruption
-        if (compteur == 16) { //on stock la valeur de
+        if (compteur == 128) { //on stock la valeur de
             compteur = 0; //RCREG2 dans un tableau
         }
         stock_led[compteur] = tampon;
@@ -135,8 +133,6 @@ void main(void) {
     // char msg1[80] = "Slave Ready \n \r";
     initPorts(); // Initialize ports to startup state
     initComms(); // Initialize the serial port
-    int i = 0;
-    char mux = 0;
     while (1) {
         
         decodage();
@@ -148,7 +144,7 @@ void main(void) {
 void decodage() {
     char a = 0;
     for (a = 0; a < 8; a++) {
-        if (MASK[a] & stock_led[2 * slave]) //n numero de l'etage [0;7]
+        if (MASK[a] & stock_led[2 * slave]) 
         {
             led_state[0][a] = 1;
         } else {
