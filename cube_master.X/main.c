@@ -79,16 +79,16 @@
 
 
 // DEFINE LISTE
-#define etage0   PORTCbits.RC0
-#define etage1   PORTCbits.RC1
-#define etage2   PORTCbits.RC2
-#define etage3   PORTCbits.RC3
-#define etage4   PORTCbits.RC4
-#define etage5   PORTCbits.RC5
-#define etage6   PORTCbits.RC6
-#define etage7   PORTCbits.RC7
+#define etage0  PORTCbits.RC0
+#define etage1  PORTCbits.RC1
+#define etage2  PORTCbits.RC2
+#define etage3  PORTCbits.RC3
+#define etage4  PORTCbits.RC4
+#define etage5  PORTCbits.RC5
+#define etage6  PORTCbits.RC6
+#define etage7  PORTCbits.RC7
 
-#define clock  PORTAbits.RA0
+#define clock PORTAbits.RA0
 
 // GLOBAL
 char tampon = 0;
@@ -123,8 +123,8 @@ void init_timer(void);
 void multiplexeur(char);
 
 void main(void) {
-    char msg1[80] = "MASTER IS READY \n \r";
-    long i = 0;
+    //char msg1[80] = "MASTER IS READY \n \r";
+    char i = 0;
     long j = 0;
 
     initPorts(); // Initialize ports to startup state
@@ -133,7 +133,7 @@ void main(void) {
     while (1) {
         for (i = 0; i < 8; i++) {
             multiplexeur(i);
-            for (j = 0; j < 10000; j++) {
+            for (j = 0; j < 100000; j++) {
             }      
         }
         
@@ -142,14 +142,15 @@ void main(void) {
 }
 
 void multiplexeur(char n) {
-    etage0 = 0;
-    etage1 = 0;
-    etage2 = 0;
-    etage3 = 0;
-    etage4 = 0;
-    etage5 = 0;
-    etage6 = 0;
-    etage7 = 0;
+    char d=0;
+    etage0 = 0;for(d=0;d<4;d++){}
+    etage1 = 0;for(d=0;d<4;d++){}
+    etage2 = 0;for(d=0;d<4;d++){}
+    etage3 = 0;for(d=0;d<4;d++){}
+    etage4 = 0;for(d=0;d<4;d++){}
+    etage5 = 0;for(d=0;d<4;d++){}
+    etage6 = 0;for(d=0;d<4;d++){}
+    etage7 = 0;for(d=0;d<4;d++){}
 
     switch (n) {
         case 0:

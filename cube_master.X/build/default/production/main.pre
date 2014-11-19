@@ -22007,8 +22007,8 @@ void init_timer(void);
 void multiplexeur(char);
 
 void main(void) {
-char msg1[80] = "MASTER IS READY \n \r";
-long i = 0;
+
+char i = 0;
 long j = 0;
 
 initPorts();
@@ -22017,12 +22017,7 @@ initComms();
 while (1) {
 for (i = 0; i < 8; i++) {
 multiplexeur(i);
-PORTAbits.RA0 = 1;
-for (j = 0; j < 100; j++) {
-}
-PORTAbits.RA0 = 0;
-for (j = 0; j < 10000; j++) {
-
+for (j = 0; j < 100000; j++) {
 }
 }
 
@@ -22031,46 +22026,47 @@ for (j = 0; j < 10000; j++) {
 }
 
 void multiplexeur(char n) {
-PORTCbits.RC7 = 0;
-PORTCbits.RC6 = 0;
-PORTCbits.RC5 = 0;
-PORTCbits.RC4 = 0;
-PORTCbits.RC0 = 0;
-PORTCbits.RC1 = 0;
-PORTCbits.RC2 = 0;
-PORTCbits.RC3 = 0;
+char d=0;
+PORTCbits.RC0 = 0;for(d=0;d<4;d++){}
+PORTCbits.RC1 = 0;for(d=0;d<4;d++){}
+PORTCbits.RC2 = 0;for(d=0;d<4;d++){}
+PORTCbits.RC3 = 0;for(d=0;d<4;d++){}
+PORTCbits.RC4 = 0;for(d=0;d<4;d++){}
+PORTCbits.RC5 = 0;for(d=0;d<4;d++){}
+PORTCbits.RC6 = 0;for(d=0;d<4;d++){}
+PORTCbits.RC7 = 0;for(d=0;d<4;d++){}
 
 switch (n) {
 case 0:
-PORTCbits.RC7 = 1;
-break;
-
-case 1:
-PORTCbits.RC6 = 1;
-break;
-
-case 2:
-PORTCbits.RC5 = 1;
-break;
-
-case 3:
-PORTCbits.RC4 = 1;
-break;
-
-case 4:
 PORTCbits.RC0 = 1;
 break;
 
-case 5:
+case 1:
 PORTCbits.RC1 = 1;
 break;
 
-case 6:
+case 2:
 PORTCbits.RC2 = 1;
 break;
 
-case 7:
+case 3:
 PORTCbits.RC3 = 1;
+break;
+
+case 4:
+PORTCbits.RC4 = 1;
+break;
+
+case 5:
+PORTCbits.RC5 = 1;
+break;
+
+case 6:
+PORTCbits.RC6 = 1;
+break;
+
+case 7:
+PORTCbits.RC7 = 1;
 break;
 
 }
