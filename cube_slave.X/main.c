@@ -139,23 +139,23 @@ void main(void) {
     char mux = 0;
     while (1) {
         
-        decodage(0);
+        decodage();
         affichage();
     }
 }
 
 
-void decodage(int n) {
+void decodage() {
     char a = 0;
     for (a = 0; a < 8; a++) {
-        if (MASK[a] & stock_led[2 * slave + 16 * n]) //n numero de l'etage [0;7]
+        if (MASK[a] & stock_led[2 * slave]) //n numero de l'etage [0;7]
         {
             led_state[0][a] = 1;
         } else {
             led_state[0][a] = 0;
         }
 
-        if (MASK[a] & stock_led[2 * slave + 1 + 16 * n]) {
+        if (MASK[a] & stock_led[2 * slave + 1]) {
             led_state[1][a] = 1;
         } else {
             led_state[1][a] = 0;
