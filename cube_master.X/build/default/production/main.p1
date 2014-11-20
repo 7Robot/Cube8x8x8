@@ -3,9 +3,16 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _RC2IF `Vb ~T0 @X0 0 e@32037 ]
 "32280
 [v _RCREG2 `Vuc ~T0 @X0 0 e@3962 ]
-"44733
-[v _TMR0IF `Vb ~T0 @X0 0 e@32658 ]
-"32607
+[p mainexit ]
+"1 port.h
+[v _initPorts `(v ~T0 @X0 0 ef ]
+"4 usart.h
+[v _initComms `(v ~T0 @X0 0 ef ]
+"66 main.h
+[v _init_timer `(v ~T0 @X0 0 ef ]
+"67
+[v _multiplexeur `(v ~T0 @X0 0 ef1`uc ]
+"32607 /opt/microchip/xc8/v1.33/include/pic18f25k80.h
 [s S2125 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S2125 . RC0 RC1 RC2 RC3 RC4 RC5 RC6 RC7 ]
 "32617
@@ -22,15 +29,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S2124 . . . . . ]
 "32630
 [v _PORTCbits `VS2124 ~T0 @X0 0 e@3970 ]
-[p mainexit ]
-"1 port.h
-[v _initPorts `(v ~T0 @X0 0 ef ]
-"4 usart.h
-[v _initComms `(v ~T0 @X0 0 ef ]
-"129 main.c
-[v _init_timer `(v ~T0 @X0 0 ef ]
-"130
-[v _multiplexeur `(v ~T0 @X0 0 ef1`uc ]
 "6 usart.h
 [v _writeDataToUART `(v ~T0 @X0 0 ef1`uc ]
 "44631 /opt/microchip/xc8/v1.33/include/pic18f25k80.h
@@ -17442,10 +17440,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;usart.h: 4: void initComms();
 [; ;usart.h: 5: void writeStringToUART (const char* msg);
 [; ;usart.h: 6: void writeDataToUART(char);
-"66 main.h
-[v _msg `uc ~T0 @X0 -> 80 `i e ]
-[; ;main.h: 66: char msg[80];
-[; ;main.h: 72: unsigned char readAddress();
+[; ;main.h: 66: void init_timer(void);
+[; ;main.h: 67: void multiplexeur(char);
+[; ;main.h: 73: unsigned char readAddress();
 "19 main.c
 [p x RETEN=ON ]
 "20
@@ -17527,11 +17524,11 @@ Version 3.2 HI-TECH Software Intermediate Code
 ]
 [; ;main.c: 93: char tampon = 0;
 "94
-[v _compteur_isr `uc ~T0 @X0 1 e ]
+[v _compteur_isr `i ~T0 @X0 1 e ]
 [i _compteur_isr
--> -> 0 `i `uc
+-> 0 `i
 ]
-[; ;main.c: 94: char compteur_isr = 0;
+[; ;main.c: 94: int compteur_isr = 0;
 "95
 [v _compteur_clock `uc ~T0 @X0 1 e ]
 [i _compteur_clock
@@ -17545,632 +17542,459 @@ Version 3.2 HI-TECH Software Intermediate Code
 ]
 [; ;main.c: 96: char flag_reception = 0;
 "97
-[v _it `uc ~T0 @X0 1 e ]
-[i _it
--> -> 0 `i `uc
-]
-[; ;main.c: 97: char it = 0;
-"98
-[v _stockage_uart `uc ~T0 @X0 -> 130 `i e ]
+[v _stockage_uart `uc ~T0 @X0 -> 1050 `i e ]
 [i _stockage_uart
 :U ..
 -> -> 0 `i `uc
 ..
 ]
-[; ;main.c: 98: char stockage_uart[130] = 0;
-[v F19151 `(v ~T0 @X0 1 tf ]
-"100
-[v _low_isr `ILF19151 ~T0 @X0 1 e ]
+[; ;main.c: 97: char stockage_uart[1050] = 0;
+[v F19153 `(v ~T0 @X0 1 tf ]
+"99
+[v _high_isr `ILF19153 ~T0 @X0 1 e ]
 {
-[; ;main.c: 100: void interrupt low_priority low_isr(void) {
-[e :U _low_isr ]
+[; ;main.c: 99: void interrupt low_priority high_isr(void) {
+[e :U _high_isr ]
 [f ]
-[; ;main.c: 102: if (RC2IF ) {
-"102
+[; ;main.c: 101: if (RC2IF ) {
+"101
 [e $ ! _RC2IF 2640  ]
 {
-[; ;main.c: 103: tampon = RCREG2;
-"103
+[; ;main.c: 102: tampon = RCREG2;
+"102
 [e = _tampon _RCREG2 ]
-[; ;main.c: 104: if (compteur_isr == 128) {
-"104
-[e $ ! == -> _compteur_isr `i -> 128 `i 2641  ]
+[; ;main.c: 103: if (compteur_isr == 1024) {
+"103
+[e $ ! == _compteur_isr -> 1024 `i 2641  ]
 {
-[; ;main.c: 105: compteur_isr = 0;
+[; ;main.c: 104: compteur_isr = 0;
+"104
+[e = _compteur_isr -> 0 `i ]
 "105
-[e = _compteur_isr -> -> 0 `i `uc ]
-"106
 }
 [e :U 2641 ]
-[; ;main.c: 106: }
-[; ;main.c: 107: compteur_isr = compteur_isr + 1;
+[; ;main.c: 105: }
+[; ;main.c: 106: stockage_uart[compteur_isr] = tampon;
+"106
+[e = *U + &U _stockage_uart * -> -> _compteur_isr `ui `ux -> -> # *U &U _stockage_uart `ui `ux _tampon ]
+[; ;main.c: 107: compteur_isr++;
 "107
-[e = _compteur_isr -> + -> _compteur_isr `i -> 1 `i `uc ]
-[; ;main.c: 109: stockage_uart[compteur_isr] = tampon;
+[e ++ _compteur_isr -> 1 `i ]
 "109
-[e = *U + &U _stockage_uart * -> _compteur_isr `ux -> -> # *U &U _stockage_uart `ui `ux _tampon ]
-"111
 }
 [e :U 2640 ]
-[; ;main.c: 111: }
-[; ;main.c: 112: RC2IF = 0;
-"112
+[; ;main.c: 109: }
+[; ;main.c: 110: RC2IF = 0;
+"110
 [e = _RC2IF -> -> 0 `i `b ]
-[; ;main.c: 113: }
-"113
+[; ;main.c: 111: }
+"111
 [e :UE 2639 ]
 }
-[v F19154 `(v ~T0 @X0 1 tf ]
-"115
-[v _timer_isr `IHF19154 ~T0 @X0 1 e ]
-{
-[; ;main.c: 115: void interrupt high_priority timer_isr(void) {
-[e :U _timer_isr ]
-[f ]
-[; ;main.c: 117: if (TMR0IF) {
-"117
-[e $ ! _TMR0IF 2643  ]
-{
-[; ;main.c: 118: compteur_clock++;
-"118
-[e ++ _compteur_clock -> -> 1 `i `uc ]
-[; ;main.c: 119: if (compteur_clock == 8) {
-"119
-[e $ ! == -> _compteur_clock `i -> 8 `i 2644  ]
-{
-[; ;main.c: 120: compteur_clock = 0;
-"120
-[e = _compteur_clock -> -> 0 `i `uc ]
-[; ;main.c: 121: PORTCbits.RC2 = 1;
-"121
-[e = . . _PORTCbits 0 2 -> -> 1 `i `uc ]
-"122
-}
-[e :U 2644 ]
-[; ;main.c: 122: }
-[; ;main.c: 123: PORTCbits.RC2 = 0;
-"123
-[e = . . _PORTCbits 0 2 -> -> 0 `i `uc ]
-"124
-}
-[e :U 2643 ]
-[; ;main.c: 124: }
-[; ;main.c: 125: TMR0IF = 0;
-"125
-[e = _TMR0IF -> -> 0 `i `b ]
-[; ;main.c: 126: }
-"126
-[e :UE 2642 ]
-}
-[; ;main.c: 129: void init_timer(void);
-[; ;main.c: 130: void multiplexeur(char);
-"132
+"113
 [v _main `(v ~T0 @X0 1 ef ]
 {
-[; ;main.c: 132: void main(void) {
+[; ;main.c: 113: void main(void) {
 [e :U _main ]
 [f ]
-"134
-[v _i `uc ~T0 @X0 1 a ]
-[; ;main.c: 134: char i = 0;
-[e = _i -> -> 0 `i `uc ]
-"135
-[v _j `l ~T0 @X0 1 a ]
-[; ;main.c: 135: long j = 0;
-[e = _j -> -> 0 `i `l ]
-[; ;main.c: 137: initPorts();
-"137
+"115
+[v _mux `uc ~T0 @X0 1 a ]
+[; ;main.c: 115: char mux = 0;
+[e = _mux -> -> 0 `i `uc ]
+[; ;main.c: 116: initPorts();
+"116
 [e ( _initPorts ..  ]
-[; ;main.c: 138: initComms();
-"138
+[; ;main.c: 117: initComms();
+"117
 [e ( _initComms ..  ]
-[; ;main.c: 139: init_timer();
-"139
+[; ;main.c: 118: init_timer();
+"118
 [e ( _init_timer ..  ]
-[; ;main.c: 141: while (1) {
-"141
-[e :U 2647 ]
+"119
+[v _delaimain `i ~T0 @X0 1 a ]
+[; ;main.c: 119: int delaimain = 0;
+[e = _delaimain -> 0 `i ]
+[; ;main.c: 120: while (1) {
+"120
+[e :U 2644 ]
 {
-[; ;main.c: 142: multiplexeur(compteur_clock);
-"142
-[e ( _multiplexeur (1 _compteur_clock ]
-[; ;main.c: 143: for (j = 0; j < 100; j++) {
-"143
+[; ;main.c: 121: for (mux = 0; mux < 8; mux++) {
+"121
 {
-[e = _j -> -> 0 `i `l ]
-[e $ < _j -> -> 100 `i `l 2649  ]
+[e = _mux -> -> 0 `i `uc ]
+[e $ < -> _mux `i -> 8 `i 2646  ]
+[e $U 2647  ]
+[e :U 2646 ]
+{
+[; ;main.c: 122: multiplexeur(mux);
+"122
+[e ( _multiplexeur (1 _mux ]
+[; ;main.c: 123: for (delaimain = 0; delaimain < 1000; delaimain++) {
+"123
+{
+[e = _delaimain -> 0 `i ]
+[e $ < _delaimain -> 1000 `i 2649  ]
 [e $U 2650  ]
 [e :U 2649 ]
 {
-"144
+"124
 }
-"143
-[e ++ _j -> -> 1 `i `l ]
-[e $ < _j -> -> 100 `i `l 2649  ]
+"123
+[e ++ _delaimain -> 1 `i ]
+[e $ < _delaimain -> 1000 `i 2649  ]
 [e :U 2650 ]
-"144
+"124
 }
-"145
+"125
 }
-[e :U 2646 ]
-"141
-[e $U 2647  ]
-[e :U 2648 ]
-[; ;main.c: 144: }
-[; ;main.c: 145: }
-[; ;main.c: 146: }
-"146
-[e :UE 2645 ]
+"121
+[e ++ _mux -> -> 1 `i `uc ]
+[e $ < -> _mux `i -> 8 `i 2646  ]
+[e :U 2647 ]
+"125
 }
-"148
+"128
+}
+[e :U 2643 ]
+"120
+[e $U 2644  ]
+[e :U 2645 ]
+[; ;main.c: 124: }
+[; ;main.c: 125: }
+[; ;main.c: 128: }
+[; ;main.c: 130: }
+"130
+[e :UE 2642 ]
+}
+"132
 [v _multiplexeur `(v ~T0 @X0 1 ef1`uc ]
 {
-[; ;main.c: 148: void multiplexeur(char n) {
+[; ;main.c: 132: void multiplexeur(char n) {
 [e :U _multiplexeur ]
 [v _n `uc ~T0 @X0 1 r1 ]
 [f ]
-"149
+"133
 [v _d `uc ~T0 @X0 1 a ]
-[; ;main.c: 149: char d = 0;
+[; ;main.c: 133: char d = 0;
 [e = _d -> -> 0 `i `uc ]
-"150
+"134
 [v _a `uc ~T0 @X0 1 a ]
-[; ;main.c: 150: char a = 0;
+[; ;main.c: 134: char a = 0;
 [e = _a -> -> 0 `i `uc ]
-[; ;main.c: 151: PORTCbits.RC0 = 0;
-"151
+[; ;main.c: 136: PORTCbits.RC0 = 0;
+"136
 [e = . . _PORTCbits 0 0 -> -> 0 `i `uc ]
-[; ;main.c: 152: for (d = 0; d < 4; d++) {
-"152
+[; ;main.c: 137: for (d = 0; d < 4; d++) {
+"137
 {
 [e = _d -> -> 0 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2653  ]
 [e $U 2654  ]
 [e :U 2653 ]
 {
-"153
+"138
 }
-"152
+"137
 [e ++ _d -> -> 1 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2653  ]
 [e :U 2654 ]
-"153
+"138
 }
-[; ;main.c: 153: }
-[; ;main.c: 154: PORTCbits.RC1 = 0;
-"154
+[; ;main.c: 138: }
+[; ;main.c: 139: PORTCbits.RC1 = 0;
+"139
 [e = . . _PORTCbits 0 1 -> -> 0 `i `uc ]
-[; ;main.c: 155: for (d = 0; d < 4; d++) {
-"155
+[; ;main.c: 140: for (d = 0; d < 4; d++) {
+"140
 {
 [e = _d -> -> 0 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2656  ]
 [e $U 2657  ]
 [e :U 2656 ]
 {
-"156
+"141
 }
-"155
+"140
 [e ++ _d -> -> 1 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2656  ]
 [e :U 2657 ]
-"156
+"141
 }
-[; ;main.c: 156: }
-[; ;main.c: 157: PORTCbits.RC2 = 0;
-"157
+[; ;main.c: 141: }
+[; ;main.c: 142: PORTCbits.RC2 = 0;
+"142
 [e = . . _PORTCbits 0 2 -> -> 0 `i `uc ]
-[; ;main.c: 158: for (d = 0; d < 4; d++) {
-"158
+[; ;main.c: 143: for (d = 0; d < 4; d++) {
+"143
 {
 [e = _d -> -> 0 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2659  ]
 [e $U 2660  ]
 [e :U 2659 ]
 {
-"159
+"144
 }
-"158
+"143
 [e ++ _d -> -> 1 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2659  ]
 [e :U 2660 ]
-"159
+"144
 }
-[; ;main.c: 159: }
-[; ;main.c: 160: PORTCbits.RC3 = 0;
-"160
+[; ;main.c: 144: }
+[; ;main.c: 145: PORTCbits.RC3 = 0;
+"145
 [e = . . _PORTCbits 0 3 -> -> 0 `i `uc ]
-[; ;main.c: 161: for (d = 0; d < 4; d++) {
-"161
+[; ;main.c: 146: for (d = 0; d < 4; d++) {
+"146
 {
 [e = _d -> -> 0 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2662  ]
 [e $U 2663  ]
 [e :U 2662 ]
 {
-"162
+"147
 }
-"161
+"146
 [e ++ _d -> -> 1 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2662  ]
 [e :U 2663 ]
-"162
+"147
 }
-[; ;main.c: 162: }
-[; ;main.c: 163: PORTCbits.RC4 = 0;
-"163
+[; ;main.c: 147: }
+[; ;main.c: 148: PORTCbits.RC4 = 0;
+"148
 [e = . . _PORTCbits 0 4 -> -> 0 `i `uc ]
-[; ;main.c: 164: for (d = 0; d < 4; d++) {
-"164
+[; ;main.c: 149: for (d = 0; d < 4; d++) {
+"149
 {
 [e = _d -> -> 0 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2665  ]
 [e $U 2666  ]
 [e :U 2665 ]
 {
-"165
+"150
 }
-"164
+"149
 [e ++ _d -> -> 1 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2665  ]
 [e :U 2666 ]
-"165
+"150
 }
-[; ;main.c: 165: }
-[; ;main.c: 166: PORTCbits.RC5 = 0;
-"166
+[; ;main.c: 150: }
+[; ;main.c: 151: PORTCbits.RC5 = 0;
+"151
 [e = . . _PORTCbits 0 5 -> -> 0 `i `uc ]
-[; ;main.c: 167: for (d = 0; d < 4; d++) {
-"167
+[; ;main.c: 152: for (d = 0; d < 4; d++) {
+"152
 {
 [e = _d -> -> 0 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2668  ]
 [e $U 2669  ]
 [e :U 2668 ]
 {
-"168
+"153
 }
-"167
+"152
 [e ++ _d -> -> 1 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2668  ]
 [e :U 2669 ]
-"168
+"153
 }
-[; ;main.c: 168: }
-[; ;main.c: 169: PORTCbits.RC6 = 0;
-"169
+[; ;main.c: 153: }
+[; ;main.c: 154: PORTCbits.RC6 = 0;
+"154
 [e = . . _PORTCbits 0 6 -> -> 0 `i `uc ]
-[; ;main.c: 170: for (d = 0; d < 4; d++) {
-"170
+[; ;main.c: 155: for (d = 0; d < 4; d++) {
+"155
 {
 [e = _d -> -> 0 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2671  ]
 [e $U 2672  ]
 [e :U 2671 ]
 {
-"171
+"156
 }
-"170
+"155
 [e ++ _d -> -> 1 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2671  ]
 [e :U 2672 ]
-"171
+"156
 }
-[; ;main.c: 171: }
-[; ;main.c: 172: PORTCbits.RC7 = 0;
-"172
+[; ;main.c: 156: }
+[; ;main.c: 157: PORTCbits.RC7 = 0;
+"157
 [e = . . _PORTCbits 0 7 -> -> 0 `i `uc ]
-[; ;main.c: 173: for (d = 0; d < 4; d++) {
-"173
+[; ;main.c: 158: for (d = 0; d < 4; d++) {
+"158
 {
 [e = _d -> -> 0 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2674  ]
 [e $U 2675  ]
 [e :U 2674 ]
 {
-"174
+"159
 }
-"173
+"158
 [e ++ _d -> -> 1 `i `uc ]
 [e $ < -> _d `i -> 4 `i 2674  ]
 [e :U 2675 ]
-"174
+"159
 }
-[; ;main.c: 174: }
-[; ;main.c: 176: switch (n) {
-"176
-[e $U 2678  ]
-{
-[; ;main.c: 177: case 0:
-"177
-[e :U 2679 ]
-[; ;main.c: 178: PORTCbits.RC0 = 1;
-"178
-[e = . . _PORTCbits 0 0 -> -> 1 `i `uc ]
-[; ;main.c: 179: for (a = 0; a < 16; a++) {
-"179
+[; ;main.c: 159: }
+[; ;main.c: 161: for (a = 0; a < 128; a++) {
+"161
 {
 [e = _a -> -> 0 `i `uc ]
-[e $ < -> _a `i -> 16 `i 2680  ]
-[e $U 2681  ]
-[e :U 2680 ]
-{
-[; ;main.c: 180: writeDataToUART(stockage_uart[a]);
-"180
-[e ( _writeDataToUART (1 *U + &U _stockage_uart * -> _a `ux -> -> # *U &U _stockage_uart `ui `ux ]
-"181
-}
-"179
-[e ++ _a -> -> 1 `i `uc ]
-[e $ < -> _a `i -> 16 `i 2680  ]
-[e :U 2681 ]
-"181
-}
-[; ;main.c: 181: }
-[; ;main.c: 182: break;
-"182
-[e $U 2677  ]
-[; ;main.c: 184: case 1:
-"184
-[e :U 2683 ]
-[; ;main.c: 185: PORTCbits.RC1 = 1;
-"185
-[e = . . _PORTCbits 0 1 -> -> 1 `i `uc ]
-[; ;main.c: 186: for (a = 16; a < 32; a++) {
-"186
-{
-[e = _a -> -> 16 `i `uc ]
-[e $ < -> _a `i -> 32 `i 2684  ]
-[e $U 2685  ]
-[e :U 2684 ]
-{
-[; ;main.c: 187: writeDataToUART(stockage_uart[a]);
-"187
-[e ( _writeDataToUART (1 *U + &U _stockage_uart * -> _a `ux -> -> # *U &U _stockage_uart `ui `ux ]
-"188
-}
-"186
-[e ++ _a -> -> 1 `i `uc ]
-[e $ < -> _a `i -> 32 `i 2684  ]
-[e :U 2685 ]
-"188
-}
-[; ;main.c: 188: }
-[; ;main.c: 190: break;
-"190
-[e $U 2677  ]
-[; ;main.c: 192: case 2:
-"192
-[e :U 2687 ]
-[; ;main.c: 193: PORTCbits.RC2 = 1;
-"193
-[e = . . _PORTCbits 0 2 -> -> 1 `i `uc ]
-[; ;main.c: 194: for (a = 32; a < 48; a++) {
-"194
-{
-[e = _a -> -> 32 `i `uc ]
-[e $ < -> _a `i -> 48 `i 2688  ]
-[e $U 2689  ]
-[e :U 2688 ]
-{
-[; ;main.c: 195: writeDataToUART(stockage_uart[a]);
-"195
-[e ( _writeDataToUART (1 *U + &U _stockage_uart * -> _a `ux -> -> # *U &U _stockage_uart `ui `ux ]
-"196
-}
-"194
-[e ++ _a -> -> 1 `i `uc ]
-[e $ < -> _a `i -> 48 `i 2688  ]
-[e :U 2689 ]
-"196
-}
-[; ;main.c: 196: }
-[; ;main.c: 198: break;
-"198
-[e $U 2677  ]
-[; ;main.c: 200: case 3:
-"200
-[e :U 2691 ]
-[; ;main.c: 201: PORTCbits.RC3 = 1;
-"201
-[e = . . _PORTCbits 0 3 -> -> 1 `i `uc ]
-[; ;main.c: 202: for (a = 48; a < 64; a++) {
-"202
-{
-[e = _a -> -> 48 `i `uc ]
-[e $ < -> _a `i -> 64 `i 2692  ]
-[e $U 2693  ]
-[e :U 2692 ]
-{
-[; ;main.c: 203: writeDataToUART(stockage_uart[a]);
-"203
-[e ( _writeDataToUART (1 *U + &U _stockage_uart * -> _a `ux -> -> # *U &U _stockage_uart `ui `ux ]
-"204
-}
-"202
-[e ++ _a -> -> 1 `i `uc ]
-[e $ < -> _a `i -> 64 `i 2692  ]
-[e :U 2693 ]
-"204
-}
-[; ;main.c: 204: }
-[; ;main.c: 206: break;
-"206
-[e $U 2677  ]
-[; ;main.c: 208: case 4:
-"208
-[e :U 2695 ]
-[; ;main.c: 209: PORTCbits.RC4 = 1;
-"209
-[e = . . _PORTCbits 0 4 -> -> 1 `i `uc ]
-[; ;main.c: 210: for (a = 64; a < 80; a++) {
-"210
-{
-[e = _a -> -> 64 `i `uc ]
-[e $ < -> _a `i -> 80 `i 2696  ]
-[e $U 2697  ]
-[e :U 2696 ]
-{
-[; ;main.c: 211: writeDataToUART(stockage_uart[a]);
-"211
-[e ( _writeDataToUART (1 *U + &U _stockage_uart * -> _a `ux -> -> # *U &U _stockage_uart `ui `ux ]
-"212
-}
-"210
-[e ++ _a -> -> 1 `i `uc ]
-[e $ < -> _a `i -> 80 `i 2696  ]
-[e :U 2697 ]
-"212
-}
-[; ;main.c: 212: }
-[; ;main.c: 213: break;
-"213
-[e $U 2677  ]
-[; ;main.c: 215: case 5:
-"215
-[e :U 2699 ]
-[; ;main.c: 216: PORTCbits.RC5 = 1;
-"216
-[e = . . _PORTCbits 0 5 -> -> 1 `i `uc ]
-[; ;main.c: 217: for (a = 80; a < 96; a++) {
-"217
-{
-[e = _a -> -> 80 `i `uc ]
-[e $ < -> _a `i -> 96 `i 2700  ]
-[e $U 2701  ]
-[e :U 2700 ]
-{
-[; ;main.c: 218: writeDataToUART(stockage_uart[a]);
-"218
-[e ( _writeDataToUART (1 *U + &U _stockage_uart * -> _a `ux -> -> # *U &U _stockage_uart `ui `ux ]
-"219
-}
-"217
-[e ++ _a -> -> 1 `i `uc ]
-[e $ < -> _a `i -> 96 `i 2700  ]
-[e :U 2701 ]
-"219
-}
-[; ;main.c: 219: }
-[; ;main.c: 221: break;
-"221
-[e $U 2677  ]
-[; ;main.c: 223: case 6:
-"223
-[e :U 2703 ]
-[; ;main.c: 224: PORTCbits.RC6 = 1;
-"224
-[e = . . _PORTCbits 0 6 -> -> 1 `i `uc ]
-[; ;main.c: 225: for (a = 96; a < 112; a++) {
-"225
-{
-[e = _a -> -> 96 `i `uc ]
-[e $ < -> _a `i -> 112 `i 2704  ]
-[e $U 2705  ]
-[e :U 2704 ]
-{
-[; ;main.c: 226: writeDataToUART(stockage_uart[a]);
-"226
-[e ( _writeDataToUART (1 *U + &U _stockage_uart * -> _a `ux -> -> # *U &U _stockage_uart `ui `ux ]
-"227
-}
-"225
-[e ++ _a -> -> 1 `i `uc ]
-[e $ < -> _a `i -> 112 `i 2704  ]
-[e :U 2705 ]
-"227
-}
-[; ;main.c: 227: }
-[; ;main.c: 228: break;
-"228
-[e $U 2677  ]
-[; ;main.c: 230: case 7:
-"230
-[e :U 2707 ]
-[; ;main.c: 231: PORTCbits.RC7 = 1;
-"231
-[e = . . _PORTCbits 0 7 -> -> 1 `i `uc ]
-[; ;main.c: 232: for (a = 112; a < 128; a++) {
-"232
-{
-[e = _a -> -> 112 `i `uc ]
-[e $ < -> _a `i -> 128 `i 2708  ]
-[e $U 2709  ]
-[e :U 2708 ]
-{
-[; ;main.c: 233: writeDataToUART(stockage_uart[a]);
-"233
-[e ( _writeDataToUART (1 *U + &U _stockage_uart * -> _a `ux -> -> # *U &U _stockage_uart `ui `ux ]
-"234
-}
-"232
-[e ++ _a -> -> 1 `i `uc ]
-[e $ < -> _a `i -> 128 `i 2708  ]
-[e :U 2709 ]
-"234
-}
-[; ;main.c: 234: }
-[; ;main.c: 235: break;
-"235
-[e $U 2677  ]
-"236
-}
-[; ;main.c: 236: }
-[e $U 2677  ]
-"176
-[e :U 2678 ]
-[e [\ _n , $ -> -> 0 `i `uc 2679
- , $ -> -> 1 `i `uc 2683
- , $ -> -> 2 `i `uc 2687
- , $ -> -> 3 `i `uc 2691
- , $ -> -> 4 `i `uc 2695
- , $ -> -> 5 `i `uc 2699
- , $ -> -> 6 `i `uc 2703
- , $ -> -> 7 `i `uc 2707
- 2677 ]
-"236
+[e $ < -> _a `i -> 128 `i 2677  ]
+[e $U 2678  ]
 [e :U 2677 ]
-[; ;main.c: 237: }
-"237
+{
+[; ;main.c: 162: writeDataToUART(stockage_uart[a + 128 * n]);
+"162
+[e ( _writeDataToUART (1 *U + &U _stockage_uart * -> -> + -> _a `i * -> 128 `i -> _n `i `ui `ux -> -> # *U &U _stockage_uart `ui `ux ]
+"163
+}
+"161
+[e ++ _a -> -> 1 `i `uc ]
+[e $ < -> _a `i -> 128 `i 2677  ]
+[e :U 2678 ]
+"163
+}
+[; ;main.c: 163: }
+[; ;main.c: 165: switch (n) {
+"165
+[e $U 2681  ]
+{
+[; ;main.c: 166: case 0:
+"166
+[e :U 2682 ]
+[; ;main.c: 167: PORTCbits.RC0 = 1;
+"167
+[e = . . _PORTCbits 0 0 -> -> 1 `i `uc ]
+[; ;main.c: 168: break;
+"168
+[e $U 2680  ]
+[; ;main.c: 170: case 1:
+"170
+[e :U 2683 ]
+[; ;main.c: 171: PORTCbits.RC1 = 1;
+"171
+[e = . . _PORTCbits 0 1 -> -> 1 `i `uc ]
+[; ;main.c: 172: break;
+"172
+[e $U 2680  ]
+[; ;main.c: 174: case 2:
+"174
+[e :U 2684 ]
+[; ;main.c: 175: PORTCbits.RC2 = 1;
+"175
+[e = . . _PORTCbits 0 2 -> -> 1 `i `uc ]
+[; ;main.c: 176: break;
+"176
+[e $U 2680  ]
+[; ;main.c: 178: case 3:
+"178
+[e :U 2685 ]
+[; ;main.c: 179: PORTCbits.RC3 = 1;
+"179
+[e = . . _PORTCbits 0 3 -> -> 1 `i `uc ]
+[; ;main.c: 180: break;
+"180
+[e $U 2680  ]
+[; ;main.c: 182: case 4:
+"182
+[e :U 2686 ]
+[; ;main.c: 183: PORTCbits.RC4 = 1;
+"183
+[e = . . _PORTCbits 0 4 -> -> 1 `i `uc ]
+[; ;main.c: 184: break;
+"184
+[e $U 2680  ]
+[; ;main.c: 186: case 5:
+"186
+[e :U 2687 ]
+[; ;main.c: 187: PORTCbits.RC5 = 1;
+"187
+[e = . . _PORTCbits 0 5 -> -> 1 `i `uc ]
+[; ;main.c: 188: break;
+"188
+[e $U 2680  ]
+[; ;main.c: 190: case 6:
+"190
+[e :U 2688 ]
+[; ;main.c: 191: PORTCbits.RC6 = 1;
+"191
+[e = . . _PORTCbits 0 6 -> -> 1 `i `uc ]
+[; ;main.c: 192: break;
+"192
+[e $U 2680  ]
+[; ;main.c: 194: case 7:
+"194
+[e :U 2689 ]
+[; ;main.c: 195: PORTCbits.RC7 = 1;
+"195
+[e = . . _PORTCbits 0 7 -> -> 1 `i `uc ]
+[; ;main.c: 196: break;
+"196
+[e $U 2680  ]
+"197
+}
+[; ;main.c: 197: }
+[e $U 2680  ]
+"165
+[e :U 2681 ]
+[e [\ _n , $ -> -> 0 `i `uc 2682
+ , $ -> -> 1 `i `uc 2683
+ , $ -> -> 2 `i `uc 2684
+ , $ -> -> 3 `i `uc 2685
+ , $ -> -> 4 `i `uc 2686
+ , $ -> -> 5 `i `uc 2687
+ , $ -> -> 6 `i `uc 2688
+ , $ -> -> 7 `i `uc 2689
+ 2680 ]
+"197
+[e :U 2680 ]
+[; ;main.c: 198: }
+"198
 [e :UE 2652 ]
 }
-"239
+"214
 [v _init_timer `(v ~T0 @X0 1 ef ]
 {
-[; ;main.c: 239: void init_timer(void) {
+[; ;main.c: 214: void init_timer(void) {
 [e :U _init_timer ]
 [f ]
-[; ;main.c: 241: T0PS0 = 0;
-"241
+[; ;main.c: 216: T0PS0 = 0;
+"216
 [e = _T0PS0 -> -> 0 `i `b ]
-[; ;main.c: 242: T0PS1 = 1;
-"242
+[; ;main.c: 217: T0PS1 = 1;
+"217
 [e = _T0PS1 -> -> 1 `i `b ]
-[; ;main.c: 243: T0PS2 = 0;
-"243
+[; ;main.c: 218: T0PS2 = 0;
+"218
 [e = _T0PS2 -> -> 0 `i `b ]
-[; ;main.c: 244: PSA = 0;
-"244
+[; ;main.c: 219: PSA = 0;
+"219
 [e = _PSA -> -> 0 `i `b ]
-[; ;main.c: 245: T0CS = 0;
-"245
+[; ;main.c: 220: T0CS = 0;
+"220
 [e = _T0CS -> -> 0 `i `b ]
-[; ;main.c: 246: T08BIT = 1;
-"246
+[; ;main.c: 221: T08BIT = 1;
+"221
 [e = _T08BIT -> -> 1 `i `b ]
-[; ;main.c: 247: TMR0IE = 1;
-"247
+[; ;main.c: 222: TMR0IE = 1;
+"222
 [e = _TMR0IE -> -> 1 `i `b ]
-[; ;main.c: 248: PEIE = 1;
-"248
+[; ;main.c: 223: PEIE = 1;
+"223
 [e = _PEIE -> -> 1 `i `b ]
-[; ;main.c: 249: GIE = 1;
-"249
+[; ;main.c: 224: GIE = 1;
+"224
 [e = _GIE -> -> 1 `i `b ]
-[; ;main.c: 251: TMR0ON = 1;
-"251
+[; ;main.c: 226: TMR0ON = 1;
+"226
 [e = _TMR0ON -> -> 1 `i `b ]
-[; ;main.c: 252: }
-"252
-[e :UE 2711 ]
+[; ;main.c: 227: }
+"227
+[e :UE 2690 ]
 }

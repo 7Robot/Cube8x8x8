@@ -17543,10 +17543,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;usart.h: 4: void initComms();
 [; ;usart.h: 5: void writeStringToUART (const char* msg);
 [; ;usart.h: 6: void writeDataToUART(char);
-"66 main.h
-[v _msg `uc ~T0 @X0 -> 80 `i e ]
-[; ;main.h: 66: char msg[80];
-[; ;main.h: 72: unsigned char readAddress();
+[; ;main.h: 66: void init_timer(void);
+[; ;main.h: 67: void multiplexeur(char);
+[; ;main.h: 73: unsigned char readAddress();
 "6 usart.c
 [v _initComms `(v ~T0 @X0 1 ef ]
 "7
@@ -17650,7 +17649,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;usart.c: 54: void writeStringToUART (const char *msg)
 [; ;usart.c: 55: {
 [e :U _writeStringToUART ]
+"54
 [v _msg `*Cuc ~T0 @X0 1 r1 ]
+"55
 [f ]
 [; ;usart.c: 56: while(*msg) {
 "56

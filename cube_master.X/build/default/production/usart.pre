@@ -21907,9 +21907,10 @@ void writeStringToUART (const char* msg);
 void writeDataToUART(char);
 
 # 66 "main.h"
-char msg[80];
+void init_timer(void);
+void multiplexeur(char);
 
-# 72
+# 73
 unsigned char readAddress();
 
 # 6 "usart.c"

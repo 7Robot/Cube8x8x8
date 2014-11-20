@@ -61,11 +61,12 @@
 #define OFF                 0
 
 
-// Global variables
-
-char msg[80];
 
 // Function prototypes
+void init_timer(void);
+void multiplexeur(char);
+
+
 //void readSensor(unsigned char sensor);
 //unsigned int readVoltage(unsigned char channel);
 //void output(unsigned char channel, unsigned char outputType, unsigned char onOff);

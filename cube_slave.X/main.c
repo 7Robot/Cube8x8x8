@@ -2,7 +2,7 @@
 #include "main.h"
 //=============================================================================
 // 7ROBOT
-// Created by Alexandre Proux
+// Created by Alexandre Proux & Robin Beilvert
 // Cube 8x8x8
 //============================================================github=============
 //
@@ -121,12 +121,14 @@ void interrupt low_priority high_isr(void) {
     RC2IF = 0; // On met le flag ра 0
 }
 
+/*
 void interrupt low_priority timer_isr(void) {
     // Check for overflow of TMR0
     if (TMR0IE && TMR0IF) {
     }
     TMR0IF = 0;
 }
+*/
 
 void main(void) {
     // unsigned char address = 0;

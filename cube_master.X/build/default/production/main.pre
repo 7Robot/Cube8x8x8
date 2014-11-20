@@ -21907,9 +21907,10 @@ void writeStringToUART (const char* msg);
 void writeDataToUART(char);
 
 # 66 "main.h"
-char msg[80];
+void init_timer(void);
+void multiplexeur(char);
 
-# 72
+# 73
 unsigned char readAddress();
 
 
@@ -21976,63 +21977,48 @@ unsigned char readAddress();
 
 # 93
 char tampon = 0;
-char compteur_isr = 0;
+int compteur_isr = 0;
 char compteur_clock = 0;
 char flag_reception = 0;
-char it = 0;
-char stockage_uart[130] = 0;
+char stockage_uart[1050] = 0;
 
-void interrupt low_priority low_isr(void) {
+void interrupt low_priority high_isr(void) {
 
 if (RC2IF ) {
 tampon = RCREG2;
-if (compteur_isr == 128) {
+if (compteur_isr == 1024) {
 compteur_isr = 0;
 }
-compteur_isr = compteur_isr + 1;
-
 stockage_uart[compteur_isr] = tampon;
+compteur_isr++;
 
 }
 RC2IF = 0;
 }
 
-void interrupt high_priority timer_isr(void) {
-
-if (TMR0IF) {
-compteur_clock++;
-if (compteur_clock == 8) {
-compteur_clock = 0;
-PORTCbits.RC2 = 1;
-}
-PORTCbits.RC2 = 0;
-}
-TMR0IF = 0;
-}
-
-
-void init_timer(void);
-void multiplexeur(char);
-
 void main(void) {
 
-char i = 0;
-long j = 0;
-
+char mux = 0;
 initPorts();
 initComms();
 init_timer();
-
+int delaimain = 0;
 while (1) {
-multiplexeur(compteur_clock);
-for (j = 0; j < 100; j++) {
+for (mux = 0; mux < 8; mux++) {
+multiplexeur(mux);
+for (delaimain = 0; delaimain < 1000; delaimain++) {
 }
 }
+
+
+}
+
 }
 
 void multiplexeur(char n) {
 char d = 0;
 char a = 0;
+
 PORTCbits.RC0 = 0;
 for (d = 0; d < 4; d++) {
 }
@@ -22058,69 +22044,46 @@ PORTCbits.RC7 = 0;
 for (d = 0; d < 4; d++) {
 }
 
+for (a = 0; a < 128; a++) {
+writeDataToUART(stockage_uart[a + 128 * n]);
+}
+
 switch (n) {
 case 0:
 PORTCbits.RC0 = 1;
-for (a = 0; a < 16; a++) {
-writeDataToUART(stockage_uart[a]);
-}
 break;
 
 case 1:
 PORTCbits.RC1 = 1;
-for (a = 16; a < 32; a++) {
-writeDataToUART(stockage_uart[a]);
-}
-
 break;
 
 case 2:
 PORTCbits.RC2 = 1;
-for (a = 32; a < 48; a++) {
-writeDataToUART(stockage_uart[a]);
-}
-
 break;
 
 case 3:
 PORTCbits.RC3 = 1;
-for (a = 48; a < 64; a++) {
-writeDataToUART(stockage_uart[a]);
-}
-
 break;
 
 case 4:
 PORTCbits.RC4 = 1;
-for (a = 64; a < 80; a++) {
-writeDataToUART(stockage_uart[a]);
-}
 break;
 
 case 5:
 PORTCbits.RC5 = 1;
-for (a = 80; a < 96; a++) {
-writeDataToUART(stockage_uart[a]);
-}
-
 break;
 
 case 6:
 PORTCbits.RC6 = 1;
-for (a = 96; a < 112; a++) {
-writeDataToUART(stockage_uart[a]);
-}
 break;
 
 case 7:
 PORTCbits.RC7 = 1;
-for (a = 112; a < 128; a++) {
-writeDataToUART(stockage_uart[a]);
-}
 break;
 }
 }
 
+# 214
 void init_timer(void) {
 
 T0PS0 = 0;
