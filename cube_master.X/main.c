@@ -94,13 +94,13 @@ char tampon = 0;
 int compteur_isr = 0;
 char compteur_clock = 0;
 char flag_reception = 0;
-char stockage_uart[1050] = 0;
+char stockage_uart[140] = 0;
 
 void interrupt low_priority high_isr(void) { // interruption de l'UART
 
     if (RC2IF /*&& PIE3bits.TX2IE*/) {
         tampon = RCREG2;
-        if (compteur_isr == 1024) {
+        if (compteur_isr == 128) {
             compteur_isr = 0;
         }
         stockage_uart[compteur_isr] = tampon;
@@ -158,8 +158,8 @@ void multiplexeur(char n) {
     for (d = 0; d < 4; d++) {
     }
 
-    for (a = 0; a < 128; a++) {
-        writeDataToUART(stockage_uart[a + 128 * n]);
+    for (a = 0; a < 16; a++) {
+        writeDataToUART(stockage_uart[a + 16 * n]);
     }
 
     switch (n) {
