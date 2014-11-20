@@ -1,5 +1,4 @@
 #include <xc.h>
-
 #include "main.h"
 //=============================================================================
 // 7ROBOT
@@ -92,28 +91,34 @@
 
 // GLOBAL
 char tampon = 0;
-char compteur = 0;
+char compteur_isr = 0;
+char compteur_clock = 0;
 char flag_reception = 0;
 char it = 0;
+char stockage_uart[130] = 0;
 
 void interrupt low_priority low_isr(void) { // interruption de l'UART
 
     if (RC2IF /*&& PIE3bits.TX2IE*/) {
         tampon = RCREG2;
-        if (compteur == 128) {
-            compteur = 0;
+        if (compteur_isr == 128) {
+            compteur_isr = 0;
         }
-        writeDataToUART(tampon);
-        compteur++;
+        compteur_isr = compteur_isr + 1;
+
+        stockage_uart[compteur_isr] = tampon;
+
     }
     RC2IF = 0; // On met le flag a 0
 }
 
-
-void interrupt low_priority timer_isr(void) {
+void interrupt high_priority timer_isr(void) {
     // Check for overflow of TMR0
-    if (TMR0IE && TMR0IF) {
-        // mettre la clock ici
+    if (TMR0IF) {
+        compteur_clock++;
+        if (compteur_clock == 8) {
+            compteur_clock = 0;
+        }
     }
     TMR0IF = 0;
 }
@@ -129,64 +134,104 @@ void main(void) {
 
     initPorts(); // Initialize ports to startup state
     initComms(); // Initialize the serial port
+    init_timer();
 
     while (1) {
-        for (i = 0; i < 8; i++) {
-            multiplexeur(i);
-            for (j = 0; j < 100000; j++) {
-            }      
+        multiplexeur(compteur_clock);
+        for (j = 0; j < 100; j++) {
         }
-        
-
     }
 }
 
 void multiplexeur(char n) {
-    char d=0;
-    etage0 = 0;for(d=0;d<4;d++){}
-    etage1 = 0;for(d=0;d<4;d++){}
-    etage2 = 0;for(d=0;d<4;d++){}
-    etage3 = 0;for(d=0;d<4;d++){}
-    etage4 = 0;for(d=0;d<4;d++){}
-    etage5 = 0;for(d=0;d<4;d++){}
-    etage6 = 0;for(d=0;d<4;d++){}
-    etage7 = 0;for(d=0;d<4;d++){}
+    char d = 0;
+    char a = 0;
+    etage0 = 0;
+    for (d = 0; d < 4; d++) {
+    }
+    etage1 = 0;
+    for (d = 0; d < 4; d++) {
+    }
+    etage2 = 0;
+    for (d = 0; d < 4; d++) {
+    }
+    etage3 = 0;
+    for (d = 0; d < 4; d++) {
+    }
+    etage4 = 0;
+    for (d = 0; d < 4; d++) {
+    }
+    etage5 = 0;
+    for (d = 0; d < 4; d++) {
+    }
+    etage6 = 0;
+    for (d = 0; d < 4; d++) {
+    }
+    etage7 = 0;
+    for (d = 0; d < 4; d++) {
+    }
 
     switch (n) {
         case 0:
             etage0 = 1;
+            for (a = 0; a < 16; a++) {
+                writeDataToUART(stockage_uart[a]);
+            }
             break;
 
         case 1:
             etage1 = 1;
+            for (a = 16; a < 32; a++) {
+                writeDataToUART(stockage_uart[a]);
+            }
+
             break;
 
         case 2:
             etage2 = 1;
+            for (a = 32; a < 48; a++) {
+                writeDataToUART(stockage_uart[a]);
+            }
+
             break;
 
         case 3:
             etage3 = 1;
+            for (a = 48; a < 64; a++) {
+                writeDataToUART(stockage_uart[a]);
+            }
+
             break;
 
         case 4:
             etage4 = 1;
+            for (a = 64; a < 80; a++) {
+                writeDataToUART(stockage_uart[a]);
+            }
             break;
 
         case 5:
             etage5 = 1;
+            for (a = 80; a < 96; a++) {
+                writeDataToUART(stockage_uart[a]);
+            }
+
             break;
 
         case 6:
             etage6 = 1;
+            for (a = 96; a < 112; a++) {
+                writeDataToUART(stockage_uart[a]);
+            }
             break;
 
         case 7:
             etage7 = 1;
+            for (a = 112; a < 128; a++) {
+                writeDataToUART(stockage_uart[a]);
+            }
             break;
-
     }
-
 }
 
 void init_timer(void) {
@@ -200,4 +245,6 @@ void init_timer(void) {
     TMR0IE = 1; //Enable TIMER0 Interrupt
     PEIE = 1; //Enable Peripheral Interrupt
     GIE = 1; //Enable INTs globally
+
+    TMR0ON = 1; //start timer
 }

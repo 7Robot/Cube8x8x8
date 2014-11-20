@@ -22017,14 +22017,14 @@ affichage();
 void decodage() {
 char a = 0;
 for (a = 0; a < 8; a++) {
-if (MASK[a] & stock_led[2 * 0])
+if (MASK[a] & stock_led[2 * 7])
 {
 led_state[0][a] = 1;
 } else {
 led_state[0][a] = 0;
 }
 
-if (MASK[a] & stock_led[2 * 0 + 1]) {
+if (MASK[a] & stock_led[2 * 7 + 1]) {
 led_state[1][a] = 1;
 } else {
 led_state[1][a] = 0;

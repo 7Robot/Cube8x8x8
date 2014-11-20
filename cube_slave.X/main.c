@@ -79,7 +79,7 @@
 
 // DEFINE LIST
 
-#define slave 0
+#define slave 7
 
 #define ledB1 PORTAbits.RA0
 #define ledB2 PORTAbits.RA3

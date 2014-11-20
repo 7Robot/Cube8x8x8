@@ -1,7 +1,7 @@
 
 
 Microchip Technology PIC18 LITE Macro Assembler V1.33 build 59893 
-                                                                                               Wed Nov 19 12:36:44 2014
+                                                                                               Wed Nov 19 12:50:01 2014
 
 Microchip Technology Omniscient Code Generator (Lite mode) build 59893
      1                           	processor	18F25K80
@@ -588,7 +588,7 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
    562  000178  0012               	return	
    563  00017A                     l727:
    564                           
-   565                           ;main.c: 147: if (MASK[a] & stock_led[2 * 0])
+   565                           ;main.c: 147: if (MASK[a] & stock_led[2 * 7])
    566  00017A  5023               	movf	decodage@a,w,c
    567  00017C  0D01               	mullw	1
    568  00017E  0E39               	movlw	low _MASK
@@ -599,7 +599,7 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
    573  000188  6EDA               	movwf	fsr2h,c
    574  00018A  50DF               	movf	indf2,w,c
    575  00018C  0100               	movlb	0	; () banked
-   576  00018E  1560               	andwf	_stock_led& (0+255),w,b
+   576  00018E  156E               	andwf	(_stock_led+14)& (0+255),w,b
    577  000190  0900               	iorlw	0
    578  000192  B4D8               	btfsc	status,2,c
    579  000194  D00A               	goto	l731
@@ -635,7 +635,7 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
    609                           
    610                           ; BSR set to: 0
    611                           ;main.c: 152: }
-   612                           ;main.c: 154: if (MASK[a] & stock_led[2 * 0 + 1]) {
+   612                           ;main.c: 154: if (MASK[a] & stock_led[2 * 7 + 1]) {
    613  0001BE  5023               	movf	decodage@a,w,c
    614  0001C0  0D01               	mullw	1
    615  0001C2  0E39               	movlw	low _MASK
@@ -646,7 +646,7 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
    620  0001CC  6EDA               	movwf	fsr2h,c
    621  0001CE  50DF               	movf	indf2,w,c
    622  0001D0  0100               	movlb	0	; () banked
-   623  0001D2  1561               	andwf	(_stock_led+1)& (0+255),w,b
+   623  0001D2  156F               	andwf	(_stock_led+15)& (0+255),w,b
    624  0001D4  0900               	iorlw	0
    625  0001D6  B4D8               	btfsc	status,2,c
    626  0001D8  D00A               	goto	l735
@@ -1506,7 +1506,7 @@ CODE                 0      0       0       0        0.0%
 
 
 Microchip Technology PIC18 Macro Assembler V1.33 build 59893 
-Symbol Table                                                                                   Wed Nov 19 12:36:44 2014
+Symbol Table                                                                                   Wed Nov 19 12:50:01 2014
 
             __CFG_CP0$ON 000000              __CFG_CP1$ON 000000              __CFG_CP2$ON 000000  
             __CFG_CP3$ON 000000              __CFG_CPB$ON 000000              __CFG_CPD$ON 000000  

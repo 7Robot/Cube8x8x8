@@ -17703,9 +17703,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e $U 2650  ]
 [e :U 2649 ]
 {
-[; ;main.c: 147: if (MASK[a] & stock_led[2 * 0])
+[; ;main.c: 147: if (MASK[a] & stock_led[2 * 7])
 "147
-[e $ ! != & -> *U + &U _MASK * -> _a `ux -> -> # *U &U _MASK `ui `ux `i -> *U + &U _stock_led * -> -> * -> 2 `i -> 0 `i `ui `ux -> -> # *U &U _stock_led `ui `ux `i -> 0 `i 2652  ]
+[e $ ! != & -> *U + &U _MASK * -> _a `ux -> -> # *U &U _MASK `ui `ux `i -> *U + &U _stock_led * -> -> * -> 2 `i -> 7 `i `ui `ux -> -> # *U &U _stock_led `ui `ux `i -> 0 `i 2652  ]
 [; ;main.c: 148: {
 "148
 {
@@ -17725,9 +17725,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 [e :U 2653 ]
 [; ;main.c: 152: }
-[; ;main.c: 154: if (MASK[a] & stock_led[2 * 0 + 1]) {
+[; ;main.c: 154: if (MASK[a] & stock_led[2 * 7 + 1]) {
 "154
-[e $ ! != & -> *U + &U _MASK * -> _a `ux -> -> # *U &U _MASK `ui `ux `i -> *U + &U _stock_led * -> -> + * -> 2 `i -> 0 `i -> 1 `i `ui `ux -> -> # *U &U _stock_led `ui `ux `i -> 0 `i 2654  ]
+[e $ ! != & -> *U + &U _MASK * -> _a `ux -> -> # *U &U _MASK `ui `ux `i -> *U + &U _stock_led * -> -> + * -> 2 `i -> 7 `i -> 1 `i `ui `ux -> -> # *U &U _stock_led `ui `ux `i -> 0 `i 2654  ]
 {
 [; ;main.c: 155: led_state[1][a] = 1;
 "155
