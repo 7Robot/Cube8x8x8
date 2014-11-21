@@ -21921,7 +21921,7 @@ unsigned char readAddress();
 #pragma config XINST = 0
 
 
-#pragma config FOSC = INTIO1
+#pragma config FOSC = INTIO2
 #pragma config PLLCFG = 1
 #pragma config FCMEN = 0
 #pragma config IESO = 1
@@ -21980,13 +21980,13 @@ char tampon = 0;
 int compteur_isr = 0;
 char compteur_clock = 0;
 char flag_reception = 0;
-char stockage_uart[1050] = 0;
+char stockage_uart[140] = 0;
 
 void interrupt low_priority high_isr(void) {
 
 if (RC2IF ) {
 tampon = RCREG2;
-if (compteur_isr == 1024) {
+if (compteur_isr == 128) {
 compteur_isr = 0;
 }
 stockage_uart[compteur_isr] = tampon;
@@ -21996,27 +21996,32 @@ compteur_isr++;
 RC2IF = 0;
 }
 
+# 128
 void main(void) {
 
 char mux = 0;
+long i =0;
 initPorts();
 initComms();
-init_timer();
+
 int delaimain = 0;
+
 while (1) {
-for (mux = 0; mux < 8; mux++) {
-multiplexeur(mux);
-for (delaimain = 0; delaimain < 1000; delaimain++) {
-}
+
+if (compteur_clock == 8) {
+compteur_clock = 0;
 }
 
+
+multiplexeur(compteur_clock);
+compteur_clock++;
 
 }
 
 }
 
 void multiplexeur(char n) {
-char d = 0;
+long d = 0;
 char a = 0;
 
 PORTCbits.RC0 = 0;
@@ -22044,11 +22049,12 @@ PORTCbits.RC7 = 0;
 for (d = 0; d < 4; d++) {
 }
 
-for (a = 0; a < 128; a++) {
-writeDataToUART(stockage_uart[a + 128 * n]);
+for (a = 0; a < 16; a++) {
+writeDataToUART(stockage_uart[a + 16 * n]);
 }
 
 switch (n) {
+
 case 0:
 PORTCbits.RC0 = 1;
 break;
@@ -22081,14 +22087,15 @@ case 7:
 PORTCbits.RC7 = 1;
 break;
 }
+for (d = 0; d < 250; d++) {
+}
 }
 
-# 214
 void init_timer(void) {
 
-T0PS0 = 0;
+T0PS0 = 1;
 T0PS1 = 1;
-T0PS2 = 0;
+T0PS2 = 1;
 PSA = 0;
 T0CS = 0;
 T08BIT = 1;
@@ -22096,5 +22103,5 @@ TMR0IE = 1;
 PEIE = 1;
 GIE = 1;
 
-TMR0ON = 1;
+TMR0ON = 0;
 }

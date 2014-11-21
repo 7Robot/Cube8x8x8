@@ -22,7 +22,7 @@
 #pragma config XINST = OFF      // Extended Instruction Set (Disabled)
 
 // CONFIG1H
-#pragma config FOSC = INTIO1    // Oscillator (Internal RC oscillator)
+#pragma config FOSC = INTIO2    // Oscillator (Internal RC oscillator)
 #pragma config PLLCFG = ON    // PLL x4 Enable bit (Disabled)
 #pragma config FCMEN = OFF      // Fail-Safe Clock Monitor (Disabled)
 #pragma config IESO = ON       // Internal External Oscillator Switch Over Mode (Disabled)
@@ -110,27 +110,46 @@ void interrupt low_priority high_isr(void) { // interruption de l'UART
     RC2IF = 0; // On met le flag a 0
 }
 
+
+
+//void interrupt low_priority timer_isr(void) {
+//    // Check for overflow of TMR0
+//    if (TMR0IF) {
+//        if (compteur_clock == 8) {
+//            compteur_clock = 0;
+//        }
+//
+//        multiplexeur(compteur_clock);
+//        compteur_clock++;
+//    }
+//    TMR0IF = 0;
+//}
+
 void main(void) {
     //char msg1[80] = "MASTER IS READY \n \r";
     char mux = 0;
+    long i =0;
     initPorts(); // Initialize ports to startup state
     initComms(); // Initialize the serial port
-    init_timer();
+    //init_timer();
     int delaimain = 0;
+
     while (1) {
-        for (mux = 0; mux < 8; mux++) {
-            multiplexeur(mux);
-            for (delaimain = 0; delaimain < 1000; delaimain++) {
-            }
+
+        if (compteur_clock == 8) {
+            compteur_clock = 0;
         }
 
 
+        multiplexeur(compteur_clock);
+        compteur_clock++;
+        //for ( i =0 ; i<1000 ;i++){}
     }
 
 }
 
 void multiplexeur(char n) {
-    char d = 0;
+    long d = 0;
     char a = 0;
 
     etage0 = 0;
@@ -163,6 +182,7 @@ void multiplexeur(char n) {
     }
 
     switch (n) {
+
         case 0:
             etage0 = 1;
             break;
@@ -195,27 +215,15 @@ void multiplexeur(char n) {
             etage7 = 1;
             break;
     }
-}
-
-/*
-void interrupt high_priority timer_isr(void) {
-    // Check for overflow of TMR0
-    if (TMR0IF) {
-        if (compteur_clock == 8) {
-            compteur_clock = 0;
-        }
-
-        multiplexeur(compteur_clock);
-        compteur_clock++;
+    for (d = 0; d < 250; d++) {
     }
-    TMR0IF = 0;
 }
- */
+
 void init_timer(void) {
     //Setup Timer0
-    T0PS0 = 0; //Prescaler is divide by 256
+    T0PS0 = 1; //Prescaler is divide by 256
     T0PS1 = 1;
-    T0PS2 = 0;
+    T0PS2 = 1;
     PSA = 0; //Timer Clock Source is from Prescaler
     T0CS = 0; //Prescaler gets clock from FCPU
     T08BIT = 1; //8 BIT MODE
@@ -223,5 +231,5 @@ void init_timer(void) {
     PEIE = 1; //Enable Peripheral Interrupt
     GIE = 1; //Enable INTs globally
 
-    TMR0ON = 1; //start timer
+    TMR0ON = 0; //start timer
 }

@@ -29,7 +29,7 @@ void initPorts(void) {
 
     GIE = 1;
     PEIE = 1;
-    INTCON =0b11111000;
+    INTCON =0b11100000;
 
     OSCTUNEbits.PLLEN = 1;
 

@@ -21976,7 +21976,7 @@ void affichage();
 # 104
 char tampon = 0;
 char MASK[8] = {0b10000000, 0b01000000, 0b00100000, 0b00010000, 0b00001000, 0b00000100, 0b00000010, 0b00000001};
-char stock_led[140] = 0;
+char stock_led[20] = 0;
 int compteur = 0;
 char compteur_clock = 0;
 char state_clock = 0;
@@ -21985,7 +21985,7 @@ char led_state[2][8] = 0;
 void interrupt low_priority high_isr(void) {
 if (RC2IF) {
 tampon = RCREG2;
-if (compteur == 128) {
+if (compteur == 16) {
 compteur = 0;
 }
 stock_led[compteur] = tampon;
@@ -21994,13 +21994,7 @@ compteur++;
 RC2IF = 0;
 }
 
-void interrupt low_priority timer_isr(void) {
-
-if (TMR0IE && TMR0IF) {
-}
-TMR0IF = 0;
-}
-
+# 133
 void main(void) {
 
 
@@ -22034,7 +22028,7 @@ led_state[1][a] = 0;
 
 void init_timer(void) {
 
-# 172
+# 174
 }
 
 void affichage() {

@@ -103,7 +103,7 @@
 
 char tampon = 0;
 char MASK[8] = {0b10000000, 0b01000000, 0b00100000, 0b00010000, 0b00001000, 0b00000100, 0b00000010, 0b00000001};
-char stock_led[140] = 0;
+char stock_led[20] = 0;
 int compteur = 0;
 char compteur_clock = 0;
 char state_clock = 0;
@@ -112,7 +112,7 @@ char led_state[2][8] = 0; // Ligne 0 : Bleu, Ligne 1 : Rouge
 void interrupt low_priority high_isr(void) {
     if (RC2IF) {
         tampon = RCREG2; //a chaque interruption
-        if (compteur == 128) { //on stock la valeur de
+        if (compteur == 16) { //on stock la valeur de
             compteur = 0; //RCREG2 dans un tableau
         }
         stock_led[compteur] = tampon;
@@ -121,14 +121,6 @@ void interrupt low_priority high_isr(void) {
     RC2IF = 0; // On met le flag ра 0
 }
 
-/*
-void interrupt low_priority timer_isr(void) {
-    // Check for overflow of TMR0
-    if (TMR0IE && TMR0IF) {
-    }
-    TMR0IF = 0;
-}
-*/
 
 void main(void) {
     // unsigned char address = 0;
