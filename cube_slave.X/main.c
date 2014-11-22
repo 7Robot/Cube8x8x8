@@ -118,13 +118,12 @@ void interrupt low_priority high_isr(void) {
         stock_led[compteur] = tampon;
         compteur++;
     }
-    RC2IF = 0; // On met le flag ра 0
+    RC2IF = 0; // On remet le flag ├а 0
 }
 
 
 void main(void) {
-    // unsigned char address = 0;
-    // char msg1[80] = "Slave Ready \n \r";
+
     initPorts(); // Initialize ports to startup state
     initComms(); // Initialize the serial port
     while (1) {
@@ -153,17 +152,6 @@ void decodage() {
     }
 }
 
-void init_timer(void) {
-    //	Setup Timer0		T0PS0 = 0; //Prescaler is divide by 256
-    //	T0PS1 = 1;
-    //	T0PS2 = 0;
-    //	PSA = 0; //Timer Clock Source is from Prescaler
-    //	T0CS = 0; //Prescaler gets clock from FCPU
-    //	T08BIT = 1; //8 BIT MODE
-    //	TMR0IE = 1; //Enable TIMER0 Interrupt
-    //	PEIE = 1; //Enable Peripheral Interrupt
-    //	GIE = 1; //Enable INTs globally
-}
 
 void affichage() {
         ledB1 = led_state[0][0];
