@@ -117,7 +117,6 @@ void main(void) {
     long i =0;
     initPorts(); // Initialize ports to startup state
     initComms(); // Initialize the serial port
-    //init_timer();
     int delaimain = 0;
 
     while (1) {
