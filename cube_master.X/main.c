@@ -111,20 +111,6 @@ void interrupt low_priority high_isr(void) { // interruption de l'UART
 }
 
 
-
-//void interrupt low_priority timer_isr(void) {
-//    // Check for overflow of TMR0
-//    if (TMR0IF) {
-//        if (compteur_clock == 8) {
-//            compteur_clock = 0;
-//        }
-//
-//        multiplexeur(compteur_clock);
-//        compteur_clock++;
-//    }
-//    TMR0IF = 0;
-//}
-
 void main(void) {
     //char msg1[80] = "MASTER IS READY \n \r";
     char mux = 0;
@@ -135,17 +121,12 @@ void main(void) {
     int delaimain = 0;
 
     while (1) {
-
         if (compteur_clock == 8) {
             compteur_clock = 0;
         }
-
-
         multiplexeur(compteur_clock);
         compteur_clock++;
-        //for ( i =0 ; i<1000 ;i++){}
     }
-
 }
 
 void multiplexeur(char n) {
@@ -217,19 +198,4 @@ void multiplexeur(char n) {
     }
     for (d = 0; d < 250; d++) {
     }
-}
-
-void init_timer(void) {
-    //Setup Timer0
-    T0PS0 = 1; //Prescaler is divide by 256
-    T0PS1 = 1;
-    T0PS2 = 1;
-    PSA = 0; //Timer Clock Source is from Prescaler
-    T0CS = 0; //Prescaler gets clock from FCPU
-    T08BIT = 1; //8 BIT MODE
-    TMR0IE = 1; //Enable TIMER0 Interrupt
-    PEIE = 1; //Enable Peripheral Interrupt
-    GIE = 1; //Enable INTs globally
-
-    TMR0ON = 0; //start timer
 }
