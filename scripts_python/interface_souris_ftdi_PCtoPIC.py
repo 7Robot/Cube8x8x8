@@ -333,7 +333,7 @@ def MAJ_Couleurs(petitscarres):
 	if petitscarres == 1 :
 		for k in range(etages) :
 			for i in range (lignes):
-				for j in range(etages):
+				for j in range(colonnes):
 					if  matrice_leds[i+8*k][j] == 1 :
 						Etages.itemconfigure(carres_etages[i+8*k][j],fill='red')
 					elif matrice_leds[i+8*k][j] == 2 :					
@@ -344,7 +344,7 @@ def MAJ_Couleurs(petitscarres):
 						Etages.itemconfigure(carres_etages[i+8*k][j],fill='white')
 	else :
 		for i in range (lignes):
-			for j in range(etages):
+			for j in range(colonnes):
 				if  matrice_leds[i+8*Etage_courant][j] == 1 :
 					Canevas.itemconfigure(carre[i][j],fill='red')
 				elif matrice_leds[i+8*Etage_courant][j] == 2 :
