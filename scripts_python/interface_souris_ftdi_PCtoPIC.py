@@ -90,7 +90,7 @@ class Envoi_Trame(Thread):
 
 			# On attend le bon délai entre deux patterns
 			delaistring=liste_trame.get(2*numPattern+1)
-			sleep(int(delaistring[1:len(delaistring)-4])/1000)
+			sleep(int(delaistring[1:len(delaistring)-4])./1000)
 
 			numPattern+=1
 			if numPattern==liste_trame.size()//2:
