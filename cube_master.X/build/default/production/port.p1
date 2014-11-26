@@ -5,18 +5,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _ANCON0 `Vuc ~T0 @X0 0 e@3933 ]
 "40155
 [v _ADON `Vb ~T0 @X0 0 e@32272 ]
-"32440
-[v _PORTA `Vuc ~T0 @X0 0 e@3968 ]
 "33494
 [v _TRISA `Vuc ~T0 @X0 0 e@3986 ]
-"32531
-[v _PORTB `Vuc ~T0 @X0 0 e@3969 ]
+"32440
+[v _PORTA `Vuc ~T0 @X0 0 e@3968 ]
 "33550
 [v _TRISB `Vuc ~T0 @X0 0 e@3987 ]
-"32601
-[v _PORTC `Vuc ~T0 @X0 0 e@3970 ]
+"32531
+[v _PORTB `Vuc ~T0 @X0 0 e@3969 ]
 "33611
 [v _TRISC `Vuc ~T0 @X0 0 e@3988 ]
+"32601
+[v _PORTC `Vuc ~T0 @X0 0 e@3970 ]
 "42291
 [v _GIE `Vb ~T0 @X0 0 e@32663 ]
 "42689
@@ -17441,37 +17441,37 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;port.c: 17: ADON = 0;
 "17
 [e = _ADON -> -> 0 `i `b ]
-[; ;port.c: 20: PORTA = 0b00000000;
+[; ;port.c: 20: TRISA = 0b00000000;
 "20
-[e = _PORTA -> -> 0 `i `uc ]
-[; ;port.c: 21: TRISA = 0b00000000;
-"21
 [e = _TRISA -> -> 0 `i `uc ]
-[; ;port.c: 23: PORTB = 0b01000000;
+[; ;port.c: 21: PORTA = 0b00000000;
+"21
+[e = _PORTA -> -> 0 `i `uc ]
+[; ;port.c: 23: TRISB = 0b10000000;
 "23
-[e = _PORTB -> -> 64 `i `uc ]
-[; ;port.c: 24: TRISB = 0b10000000;
-"24
 [e = _TRISB -> -> 128 `i `uc ]
-[; ;port.c: 26: PORTC = 0b00000000;
+[; ;port.c: 24: PORTB = 0b01000000;
+"24
+[e = _PORTB -> -> 64 `i `uc ]
+[; ;port.c: 26: TRISC = 0b00000000;
 "26
-[e = _PORTC -> -> 0 `i `uc ]
-[; ;port.c: 27: TRISC = 0b00000000;
-"27
 [e = _TRISC -> -> 0 `i `uc ]
-[; ;port.c: 30: GIE = 1;
-"30
-[e = _GIE -> -> 1 `i `b ]
-[; ;port.c: 31: PEIE = 1;
+[; ;port.c: 27: PORTC = 0b00000000;
+"27
+[e = _PORTC -> -> 0 `i `uc ]
+[; ;port.c: 31: GIE = 1;
 "31
-[e = _PEIE -> -> 1 `i `b ]
-[; ;port.c: 32: INTCON =0b11100000;
+[e = _GIE -> -> 1 `i `b ]
+[; ;port.c: 32: PEIE = 1;
 "32
+[e = _PEIE -> -> 1 `i `b ]
+[; ;port.c: 33: INTCON =0b11100000;
+"33
 [e = _INTCON -> -> 224 `i `uc ]
-[; ;port.c: 34: OSCTUNEbits.PLLEN = 1;
-"34
+[; ;port.c: 35: OSCTUNEbits.PLLEN = 1;
+"35
 [e = . . _OSCTUNEbits 0 1 -> -> 1 `i `uc ]
-[; ;port.c: 38: }
-"38
+[; ;port.c: 39: }
+"39
 [e :UE 2639 ]
 }

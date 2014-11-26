@@ -118,7 +118,7 @@ void interrupt low_priority high_isr(void) {
         stock_led[compteur] = tampon;
         compteur++;
     }
-    RC2IF = 0; // On remet le flag Ã  0
+    RC2IF = 0; // On remet le flag a  0
 }
 
 

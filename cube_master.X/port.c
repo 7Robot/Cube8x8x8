@@ -17,14 +17,15 @@ void initPorts(void) {
     ADON = 0;                   //enable ADC
 
     //Digital configurations
+    TRISA = 0b00000000;         // Set PORTA pin directions: all output
     PORTA = 0b00000000;         // Initial state of PORTA
-    TRISA = 0b00000000;         // Set PORTA pin directions: all input
 
-    PORTB = 0b01000000;         // Initial state of PORTB (driver and receiver disabled, TX high, other outputs off)
     TRISB = 0b10000000;         // Set PORTB pin in output expect uart pins RB0/RB1
+    PORTB = 0b01000000;         // Initial state of PORTB (driver and receiver disabled, TX high, other outputs off)
 
-    PORTC = 0b00000000;         // Initial state of PORTC (turn LEDs, outputs off)
     TRISC = 0b00000000;         // Set PORTC pin directions: RC0-RC4 output, RC5-RC7 input
+    PORTC = 0b00000000;         // Initial state of PORTC (turn LEDs, outputs off)
+
 
 
     GIE = 1;

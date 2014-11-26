@@ -110,11 +110,10 @@ void interrupt low_priority high_isr(void) { // interruption de l'UART
     RC2IF = 0; // On met le flag a 0
 }
 
-
 void main(void) {
     //char msg1[80] = "MASTER IS READY \n \r";
     char mux = 0;
-    long i =0;
+    long i = 0;
     initPorts(); // Initialize ports to startup state
     initComms(); // Initialize the serial port
     int delaimain = 0;
@@ -132,69 +131,72 @@ void multiplexeur(char n) {
     long d = 0;
     char a = 0;
 
-    etage0 = 0;
-    for (d = 0; d < 4; d++) {
-    }
-    etage1 = 0;
-    for (d = 0; d < 4; d++) {
-    }
-    etage2 = 0;
-    for (d = 0; d < 4; d++) {
-    }
-    etage3 = 0;
-    for (d = 0; d < 4; d++) {
-    }
-    etage4 = 0;
-    for (d = 0; d < 4; d++) {
-    }
-    etage5 = 0;
-    for (d = 0; d < 4; d++) {
-    }
-    etage6 = 0;
-    for (d = 0; d < 4; d++) {
-    }
-    etage7 = 0;
-    for (d = 0; d < 4; d++) {
-    }
-
-    for (a = 0; a < 16; a++) {
-        writeDataToUART(stockage_uart[a + 16 * n]);
-    }
-
     switch (n) {
 
         case 0:
+            etage7 = 0;
+            for (a = 0; a < 16; a++) {
+                writeDataToUART(stockage_uart[a + 16 * n]);
+            }
             etage0 = 1;
             break;
 
         case 1:
+            etage0 = 0;
+            for (a = 0; a < 16; a++) {
+                writeDataToUART(stockage_uart[a + 16 * n]);
+            }
             etage1 = 1;
             break;
 
         case 2:
+            etage1 = 0;
+            for (a = 0; a < 16; a++) {
+                writeDataToUART(stockage_uart[a + 16 * n]);
+            }
             etage2 = 1;
             break;
 
         case 3:
+            etage2 = 0;
+            for (a = 0; a < 16; a++) {
+                writeDataToUART(stockage_uart[a + 16 * n]);
+            }
             etage3 = 1;
             break;
 
         case 4:
+            etage3 = 0;
+            for (a = 0; a < 16; a++) {
+                writeDataToUART(stockage_uart[a + 16 * n]);
+            }
             etage4 = 1;
             break;
 
         case 5:
+            etage4 = 0;
+            for (a = 0; a < 16; a++) {
+                writeDataToUART(stockage_uart[a + 16 * n]);
+            }
             etage5 = 1;
             break;
 
         case 6:
+            etage5 = 0;
+            for (a = 0; a < 16; a++) {
+                writeDataToUART(stockage_uart[a + 16 * n]);
+            }
             etage6 = 1;
             break;
 
         case 7:
+            etage6 = 0;
+            for (a = 0; a < 16; a++) {
+                writeDataToUART(stockage_uart[a + 16 * n]);
+            }
             etage7 = 1;
             break;
     }
-    for (d = 0; d < 250; d++) {
+    for (d = 0; d < 600; d++) {
     }
 }

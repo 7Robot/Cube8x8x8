@@ -21996,112 +21996,93 @@ compteur_isr++;
 RC2IF = 0;
 }
 
-# 128
 void main(void) {
 
 char mux = 0;
-long i =0;
+long i = 0;
 initPorts();
 initComms();
-
 int delaimain = 0;
 
 while (1) {
-
 if (compteur_clock == 8) {
 compteur_clock = 0;
 }
-
-
 multiplexeur(compteur_clock);
 compteur_clock++;
-
 }
-
 }
 
 void multiplexeur(char n) {
 long d = 0;
 char a = 0;
 
-PORTCbits.RC0 = 0;
-for (d = 0; d < 4; d++) {
-}
-PORTCbits.RC1 = 0;
-for (d = 0; d < 4; d++) {
-}
-PORTCbits.RC2 = 0;
-for (d = 0; d < 4; d++) {
-}
-PORTCbits.RC3 = 0;
-for (d = 0; d < 4; d++) {
-}
-PORTCbits.RC4 = 0;
-for (d = 0; d < 4; d++) {
-}
-PORTCbits.RC5 = 0;
-for (d = 0; d < 4; d++) {
-}
-PORTCbits.RC6 = 0;
-for (d = 0; d < 4; d++) {
-}
-PORTCbits.RC7 = 0;
-for (d = 0; d < 4; d++) {
-}
-
-for (a = 0; a < 16; a++) {
-writeDataToUART(stockage_uart[a + 16 * n]);
-}
-
 switch (n) {
 
 case 0:
+PORTCbits.RC7 = 0;
+for (a = 0; a < 16; a++) {
+writeDataToUART(stockage_uart[a + 16 * n]);
+}
 PORTCbits.RC0 = 1;
 break;
 
 case 1:
+PORTCbits.RC0 = 0;
+for (a = 0; a < 16; a++) {
+writeDataToUART(stockage_uart[a + 16 * n]);
+}
 PORTCbits.RC1 = 1;
 break;
 
 case 2:
+PORTCbits.RC1 = 0;
+for (a = 0; a < 16; a++) {
+writeDataToUART(stockage_uart[a + 16 * n]);
+}
 PORTCbits.RC2 = 1;
 break;
 
 case 3:
+PORTCbits.RC2 = 0;
+for (a = 0; a < 16; a++) {
+writeDataToUART(stockage_uart[a + 16 * n]);
+}
 PORTCbits.RC3 = 1;
 break;
 
 case 4:
+PORTCbits.RC3 = 0;
+for (a = 0; a < 16; a++) {
+writeDataToUART(stockage_uart[a + 16 * n]);
+}
 PORTCbits.RC4 = 1;
 break;
 
 case 5:
+PORTCbits.RC4 = 0;
+for (a = 0; a < 16; a++) {
+writeDataToUART(stockage_uart[a + 16 * n]);
+}
 PORTCbits.RC5 = 1;
 break;
 
 case 6:
+PORTCbits.RC5 = 0;
+for (a = 0; a < 16; a++) {
+writeDataToUART(stockage_uart[a + 16 * n]);
+}
 PORTCbits.RC6 = 1;
 break;
 
 case 7:
+PORTCbits.RC6 = 0;
+for (a = 0; a < 16; a++) {
+writeDataToUART(stockage_uart[a + 16 * n]);
+}
 PORTCbits.RC7 = 1;
 break;
 }
-for (d = 0; d < 250; d++) {
+for (d = 0; d < 1000; d++) {
 }
-}
-
-void init_timer(void) {
-
-T0PS0 = 1;
-T0PS1 = 1;
-T0PS2 = 1;
-PSA = 0;
-T0CS = 0;
-T08BIT = 1;
-TMR0IE = 1;
-PEIE = 1;
-GIE = 1;
-
-TMR0ON = 0;
 }
