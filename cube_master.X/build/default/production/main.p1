@@ -17917,11 +17917,11 @@ Version 3.2 HI-TECH Software Intermediate Code
  2648 ]
 "199
 [e :U 2648 ]
-[; ;main.c: 200: for (d = 0; d < 1000; d++) {
+[; ;main.c: 200: for (d = 0; d < 600; d++) {
 "200
 {
 [e = _d -> -> 0 `i `l ]
-[e $ < _d -> -> 1000 `i `l 2682  ]
+[e $ < _d -> -> 600 `i `l 2682  ]
 [e $U 2683  ]
 [e :U 2682 ]
 {
@@ -17929,7 +17929,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 "200
 [e ++ _d -> -> 1 `i `l ]
-[e $ < _d -> -> 1000 `i `l 2682  ]
+[e $ < _d -> -> 600 `i `l 2682  ]
 [e :U 2683 ]
 "201
 }

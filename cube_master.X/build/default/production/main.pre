@@ -22083,6 +22083,6 @@ writeDataToUART(stockage_uart[a + 16 * n]);
 PORTCbits.RC7 = 1;
 break;
 }
-for (d = 0; d < 1000; d++) {
+for (d = 0; d < 600; d++) {
 }
 }

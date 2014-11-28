@@ -59,6 +59,17 @@ pix_size=50
 # Variable logique d'envoi des trames (en cours ou pas)
 envoiState=FALSE;
 
+M1 = []
+for i in range(lignes*etages):
+	M1.append([0] * colonnes)
+
+M2 = []
+for i in range(lignes*etages):
+	M2.append([0] * colonnes)
+
+
+
+
 ###################################### Thread d'envoi de trame ######################################
 
 class Envoi_Trame(Thread):
@@ -66,14 +77,38 @@ class Envoi_Trame(Thread):
 	def __init__(self):
 		Thread.__init__(self)
 		self._arret = False
+		logs = open('Patterns//alex_cubes.txt','r')
+		for k in range(etages):	
+			for i in range(lignes):
+				for j in range(colonnes):
+					for couleur_pixel in range(5):
+						# L'appel à logs.read(1) fait avancer la lecture d'un caractère :
+						# On se remet à la bonne position avec logs.seek()
+						logs.seek(8*i+j+64*k,0)
+						if logs.read(1) == "%s" %couleur_pixel :
+							M1[i+8*k][j]=couleur_pixel
+
+		logs = open('Patterns//default.txt','r')
+		for k in range(etages):				
+			for i in range(lignes):
+				for j in range(colonnes):
+					for couleur_pixel in range(5):
+						# L'appel à logs.read(1) fait avancer la lecture d'un caractère :
+						# On se remet à la bonne position avec logs.seek()
+						logs.seek(8*i+j+64*k,0)
+						if logs.read(1) == "%s" %couleur_pixel :
+							M2[i+8*k][j]=couleur_pixel
+
 
 	def run(self):
-
+		
+		global M1
+		global M2
 		numPattern=0
-
 		while not self._arret:	
+			"""
 			filename = liste_trame.get(2*numPattern)
-			print(filename)
+			#print(filename)
 			logs = open("Patterns//%s.txt" %filename,"r")
 			for k in range(etages):	
 				for i in range(lignes):
@@ -81,13 +116,23 @@ class Envoi_Trame(Thread):
 						for couleur_pixel in range(5):
 							# L'appel à logs.read(1) fait avancer la lecture d'un caractère :
 							# On se remet à la bonne position avec logs.seek()
-							logs.seek(8*i+j+64*k,0)
-							if logs.read(1) == "%s" %couleur_pixel :
+							logs1.seek(8*i+j+64*k,0)
+							if logs1.read(1) == "%s" %couleur_pixel :
 								matrice_leds[i+8*k][j]=couleur_pixel
-
-
+			"""
+			for k in range(etages):				
+				for i in range(lignes):
+					for j in range(colonnes):
+						matrice_leds[i+8*k][j]=M1[i+8*k][j]
 			Envoyer()
-
+			sleep(0.001)
+			for k in range(etages):				
+				for i in range(lignes):
+					for j in range(colonnes):
+						matrice_leds[i+8*k][j]=M2[i+8*k][j]
+			Envoyer()
+			sleep(0.001)			
+			"""	
 			# On attend le bon délai entre deux patterns
 			delaistring=liste_trame.get(2*numPattern+1)
 			sleep(int(delaistring[1:len(delaistring)-4])/1000.)
@@ -95,7 +140,7 @@ class Envoi_Trame(Thread):
 			numPattern+=1
 			if numPattern==liste_trame.size()//2:
 				numPattern=0
-
+			"""		
 		print ("Terminé !")
 
 	def stop(self):

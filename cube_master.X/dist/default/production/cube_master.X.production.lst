@@ -1,7 +1,7 @@
 
 
 Microchip Technology PIC18 LITE Macro Assembler V1.33 build 59893 
-                                                                                               Wed Nov 26 09:19:50 2014
+                                                                                               Fri Nov 28 18:40:42 2014
 
 Microchip Technology Omniscient Code Generator (Lite mode) build 59893
      1                           	processor	18F25K80
@@ -1005,7 +1005,7 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
    984  0003A2  D7BF               	goto	l62
    985  0003A4                     l830:
    986                           
-   987                           ;main.c: 200: for (d = 0; d < 1000; d++) {
+   987                           ;main.c: 200: for (d = 0; d < 600; d++) {
    988  0003A4  0E00               	movlw	0
    989  0003A6  6E17               	movwf	multiplexeur@d,c
    990  0003A8  0E00               	movlw	0
@@ -1021,10 +1021,10 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
   1000  0003BC  0E00               	movlw	0
   1001  0003BE  5C19               	subwf	multiplexeur@d+2,w,c
   1002  0003C0  E105               	bnz	u185
-  1003  0003C2  0E03               	movlw	3
+  1003  0003C2  0E02               	movlw	2
   1004  0003C4  5C18               	subwf	multiplexeur@d+1,w,c
   1005  0003C6  E102               	bnz	u185
-  1006  0003C8  0EE8               	movlw	232
+  1006  0003C8  0E58               	movlw	88
   1007  0003CA  5C17               	subwf	multiplexeur@d,w,c
   1008  0003CC                     u185:
   1009  0003CC  B0D8               	btfsc	status,0,c
@@ -1042,10 +1042,10 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
   1021  0003E4  0E00               	movlw	0
   1022  0003E6  5C19               	subwf	multiplexeur@d+2,w,c
   1023  0003E8  E105               	bnz	u195
-  1024  0003EA  0E03               	movlw	3
+  1024  0003EA  0E02               	movlw	2
   1025  0003EC  5C18               	subwf	multiplexeur@d+1,w,c
   1026  0003EE  E102               	bnz	u195
-  1027  0003F0  0EE8               	movlw	232
+  1027  0003F0  0E58               	movlw	88
   1028  0003F2  5C17               	subwf	multiplexeur@d,w,c
   1029  0003F4                     u195:
   1030  0003F4  D7EB               	goto	u185
@@ -1714,7 +1714,7 @@ CODE                 0      0       0       0        0.0%
 
 
 Microchip Technology PIC18 Macro Assembler V1.33 build 59893 
-Symbol Table                                                                                   Wed Nov 26 09:19:50 2014
+Symbol Table                                                                                   Fri Nov 28 18:40:42 2014
 
              __CFG_CP0$ON 000000               __CFG_CP1$ON 000000               __CFG_CP2$ON 000000  
              __CFG_CP3$ON 000000                        l40 00F2                        l50 01E2  
