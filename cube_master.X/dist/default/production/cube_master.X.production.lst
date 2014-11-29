@@ -1,7 +1,7 @@
 
 
 Microchip Technology PIC18 LITE Macro Assembler V1.33 build 59893 
-                                                                                               Fri Nov 28 18:40:42 2014
+                                                                                               Fri Nov 28 20:28:28 2014
 
 Microchip Technology Omniscient Code Generator (Lite mode) build 59893
      1                           	processor	18F25K80
@@ -700,15 +700,15 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
    679  0001DC  D7DE               	goto	l760
    680                           
    681                           ;main.c: 156: }
-   682                           ;main.c: 157: PORTCbits.RC2 = 1;
-   683  0001DE  8482               	bsf	3970,2,c	;volatile
+   682                           ;main.c: 157: PORTCbits.RC3 = 1;
+   683  0001DE  8682               	bsf	3970,3,c	;volatile
    684                           
    685                           ;main.c: 158: break;
    686  0001E0  D0E1               	goto	l830
    687  0001E2                     l50:
    688                           
-   689                           ;main.c: 161: PORTCbits.RC2 = 0;
-   690  0001E2  9482               	bcf	3970,2,c	;volatile
+   689                           ;main.c: 161: PORTCbits.RC3 = 0;
+   690  0001E2  9682               	bcf	3970,3,c	;volatile
    691                           
    692                           ;main.c: 162: for (a = 0; a < 16; a++) {
    693  0001E4  0E00               	movlw	0
@@ -753,15 +753,15 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
    732  00022C  D7DE               	goto	l772
    733                           
    734                           ;main.c: 164: }
-   735                           ;main.c: 165: PORTCbits.RC3 = 1;
-   736  00022E  8682               	bsf	3970,3,c	;volatile
+   735                           ;main.c: 165: PORTCbits.RC2 = 1;
+   736  00022E  8482               	bsf	3970,2,c	;volatile
    737                           
    738                           ;main.c: 166: break;
    739  000230  D0B9               	goto	l830
    740  000232                     l53:
    741                           
-   742                           ;main.c: 169: PORTCbits.RC3 = 0;
-   743  000232  9682               	bcf	3970,3,c	;volatile
+   742                           ;main.c: 169: PORTCbits.RC2 = 0;
+   743  000232  9482               	bcf	3970,2,c	;volatile
    744                           
    745                           ;main.c: 170: for (a = 0; a < 16; a++) {
    746  000234  0E00               	movlw	0
@@ -806,15 +806,15 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
    785  00027C  D7DE               	goto	l784
    786                           
    787                           ;main.c: 172: }
-   788                           ;main.c: 173: PORTCbits.RC4 = 1;
-   789  00027E  8882               	bsf	3970,4,c	;volatile
+   788                           ;main.c: 173: PORTCbits.RC5 = 1;
+   789  00027E  8A82               	bsf	3970,5,c	;volatile
    790                           
    791                           ;main.c: 174: break;
    792  000280  D091               	goto	l830
    793  000282                     l56:
    794                           
-   795                           ;main.c: 177: PORTCbits.RC4 = 0;
-   796  000282  9882               	bcf	3970,4,c	;volatile
+   795                           ;main.c: 177: PORTCbits.RC5 = 0;
+   796  000282  9A82               	bcf	3970,5,c	;volatile
    797                           
    798                           ;main.c: 178: for (a = 0; a < 16; a++) {
    799  000284  0E00               	movlw	0
@@ -859,15 +859,15 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
    838  0002CC  D7DE               	goto	l796
    839                           
    840                           ;main.c: 180: }
-   841                           ;main.c: 181: PORTCbits.RC5 = 1;
-   842  0002CE  8A82               	bsf	3970,5,c	;volatile
+   841                           ;main.c: 181: PORTCbits.RC4 = 1;
+   842  0002CE  8882               	bsf	3970,4,c	;volatile
    843                           
    844                           ;main.c: 182: break;
    845  0002D0  D069               	goto	l830
    846  0002D2                     l59:
    847                           
-   848                           ;main.c: 185: PORTCbits.RC5 = 0;
-   849  0002D2  9A82               	bcf	3970,5,c	;volatile
+   848                           ;main.c: 185: PORTCbits.RC4 = 0;
+   849  0002D2  9882               	bcf	3970,4,c	;volatile
    850                           
    851                           ;main.c: 186: for (a = 0; a < 16; a++) {
    852  0002D4  0E00               	movlw	0
@@ -1005,7 +1005,7 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
    984  0003A2  D7BF               	goto	l62
    985  0003A4                     l830:
    986                           
-   987                           ;main.c: 200: for (d = 0; d < 600; d++) {
+   987                           ;main.c: 200: for (d = 0; d < 500; d++) {
    988  0003A4  0E00               	movlw	0
    989  0003A6  6E17               	movwf	multiplexeur@d,c
    990  0003A8  0E00               	movlw	0
@@ -1021,10 +1021,10 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
   1000  0003BC  0E00               	movlw	0
   1001  0003BE  5C19               	subwf	multiplexeur@d+2,w,c
   1002  0003C0  E105               	bnz	u185
-  1003  0003C2  0E02               	movlw	2
+  1003  0003C2  0E01               	movlw	1
   1004  0003C4  5C18               	subwf	multiplexeur@d+1,w,c
   1005  0003C6  E102               	bnz	u185
-  1006  0003C8  0E58               	movlw	88
+  1006  0003C8  0EF4               	movlw	244
   1007  0003CA  5C17               	subwf	multiplexeur@d,w,c
   1008  0003CC                     u185:
   1009  0003CC  B0D8               	btfsc	status,0,c
@@ -1042,10 +1042,10 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 59893
   1021  0003E4  0E00               	movlw	0
   1022  0003E6  5C19               	subwf	multiplexeur@d+2,w,c
   1023  0003E8  E105               	bnz	u195
-  1024  0003EA  0E02               	movlw	2
+  1024  0003EA  0E01               	movlw	1
   1025  0003EC  5C18               	subwf	multiplexeur@d+1,w,c
   1026  0003EE  E102               	bnz	u195
-  1027  0003F0  0E58               	movlw	88
+  1027  0003F0  0EF4               	movlw	244
   1028  0003F2  5C17               	subwf	multiplexeur@d,w,c
   1029  0003F4                     u195:
   1030  0003F4  D7EB               	goto	u185
@@ -1714,7 +1714,7 @@ CODE                 0      0       0       0        0.0%
 
 
 Microchip Technology PIC18 Macro Assembler V1.33 build 59893 
-Symbol Table                                                                                   Fri Nov 28 18:40:42 2014
+Symbol Table                                                                                   Fri Nov 28 20:28:28 2014
 
              __CFG_CP0$ON 000000               __CFG_CP1$ON 000000               __CFG_CP2$ON 000000  
              __CFG_CP3$ON 000000                        l40 00F2                        l50 01E2  

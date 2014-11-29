@@ -80,10 +80,10 @@
 // DEFINE LISTE
 #define etage0  PORTCbits.RC0
 #define etage1  PORTCbits.RC1
-#define etage2  PORTCbits.RC2
-#define etage3  PORTCbits.RC3
-#define etage4  PORTCbits.RC4
-#define etage5  PORTCbits.RC5
+#define etage2  PORTCbits.RC3
+#define etage3  PORTCbits.RC2
+#define etage4  PORTCbits.RC5
+#define etage5  PORTCbits.RC4
 #define etage6  PORTCbits.RC6
 #define etage7  PORTCbits.RC7
 
@@ -197,6 +197,6 @@ void multiplexeur(char n) {
             etage7 = 1;
             break;
     }
-    for (d = 0; d < 600; d++) {
+    for (d = 0; d < 500; d++) {
     }
 }

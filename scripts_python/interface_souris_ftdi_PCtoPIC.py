@@ -12,7 +12,7 @@ script interface_souris_ftdi_PCtoPIC.py
 
 Cube8x8x8
 
-Created by Robin Beilvert, 3 lines written by Alexandre Proux and Felix is watching
+Created by Robin Beilvert, 3 lines written by Ale*xandre Proux and Felix is watching
 """
 
 # Bibliothèques pour ftdi, calculs et gestion du temps
@@ -88,7 +88,7 @@ class Envoi_Trame(Thread):
 						if logs.read(1) == "%s" %couleur_pixel :
 							M1[i+8*k][j]=couleur_pixel
 
-		logs = open('Patterns//default.txt','r')
+		logs = open('Patterns//alex_cubeb.txt','r')
 		for k in range(etages):				
 			for i in range(lignes):
 				for j in range(colonnes):
@@ -125,13 +125,13 @@ class Envoi_Trame(Thread):
 					for j in range(colonnes):
 						matrice_leds[i+8*k][j]=M1[i+8*k][j]
 			Envoyer()
-			sleep(0.001)
+			sleep(0.5)
 			for k in range(etages):				
 				for i in range(lignes):
 					for j in range(colonnes):
 						matrice_leds[i+8*k][j]=M2[i+8*k][j]
 			Envoyer()
-			sleep(0.001)			
+			sleep(0.5)
 			"""	
 			# On attend le bon délai entre deux patterns
 			delaistring=liste_trame.get(2*numPattern+1)

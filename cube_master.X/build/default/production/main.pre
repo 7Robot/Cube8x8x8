@@ -22040,35 +22040,35 @@ PORTCbits.RC1 = 0;
 for (a = 0; a < 16; a++) {
 writeDataToUART(stockage_uart[a + 16 * n]);
 }
-PORTCbits.RC2 = 1;
-break;
-
-case 3:
-PORTCbits.RC2 = 0;
-for (a = 0; a < 16; a++) {
-writeDataToUART(stockage_uart[a + 16 * n]);
-}
 PORTCbits.RC3 = 1;
 break;
 
-case 4:
+case 3:
 PORTCbits.RC3 = 0;
 for (a = 0; a < 16; a++) {
 writeDataToUART(stockage_uart[a + 16 * n]);
 }
-PORTCbits.RC4 = 1;
+PORTCbits.RC2 = 1;
 break;
 
-case 5:
-PORTCbits.RC4 = 0;
+case 4:
+PORTCbits.RC2 = 0;
 for (a = 0; a < 16; a++) {
 writeDataToUART(stockage_uart[a + 16 * n]);
 }
 PORTCbits.RC5 = 1;
 break;
 
-case 6:
+case 5:
 PORTCbits.RC5 = 0;
+for (a = 0; a < 16; a++) {
+writeDataToUART(stockage_uart[a + 16 * n]);
+}
+PORTCbits.RC4 = 1;
+break;
+
+case 6:
+PORTCbits.RC4 = 0;
 for (a = 0; a < 16; a++) {
 writeDataToUART(stockage_uart[a + 16 * n]);
 }
@@ -22083,6 +22083,6 @@ writeDataToUART(stockage_uart[a + 16 * n]);
 PORTCbits.RC7 = 1;
 break;
 }
-for (d = 0; d < 600; d++) {
+for (d = 0; d < 500; d++) {
 }
 }

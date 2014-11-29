@@ -17734,18 +17734,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 "156
 }
 [; ;main.c: 156: }
-[; ;main.c: 157: PORTCbits.RC2 = 1;
+[; ;main.c: 157: PORTCbits.RC3 = 1;
 "157
-[e = . . _PORTCbits 0 2 -> -> 1 `i `uc ]
+[e = . . _PORTCbits 0 3 -> -> 1 `i `uc ]
 [; ;main.c: 158: break;
 "158
 [e $U 2648  ]
 [; ;main.c: 160: case 3:
 "160
 [e :U 2662 ]
-[; ;main.c: 161: PORTCbits.RC2 = 0;
+[; ;main.c: 161: PORTCbits.RC3 = 0;
 "161
-[e = . . _PORTCbits 0 2 -> -> 0 `i `uc ]
+[e = . . _PORTCbits 0 3 -> -> 0 `i `uc ]
 [; ;main.c: 162: for (a = 0; a < 16; a++) {
 "162
 {
@@ -17766,18 +17766,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 "164
 }
 [; ;main.c: 164: }
-[; ;main.c: 165: PORTCbits.RC3 = 1;
+[; ;main.c: 165: PORTCbits.RC2 = 1;
 "165
-[e = . . _PORTCbits 0 3 -> -> 1 `i `uc ]
+[e = . . _PORTCbits 0 2 -> -> 1 `i `uc ]
 [; ;main.c: 166: break;
 "166
 [e $U 2648  ]
 [; ;main.c: 168: case 4:
 "168
 [e :U 2666 ]
-[; ;main.c: 169: PORTCbits.RC3 = 0;
+[; ;main.c: 169: PORTCbits.RC2 = 0;
 "169
-[e = . . _PORTCbits 0 3 -> -> 0 `i `uc ]
+[e = . . _PORTCbits 0 2 -> -> 0 `i `uc ]
 [; ;main.c: 170: for (a = 0; a < 16; a++) {
 "170
 {
@@ -17798,18 +17798,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 "172
 }
 [; ;main.c: 172: }
-[; ;main.c: 173: PORTCbits.RC4 = 1;
+[; ;main.c: 173: PORTCbits.RC5 = 1;
 "173
-[e = . . _PORTCbits 0 4 -> -> 1 `i `uc ]
+[e = . . _PORTCbits 0 5 -> -> 1 `i `uc ]
 [; ;main.c: 174: break;
 "174
 [e $U 2648  ]
 [; ;main.c: 176: case 5:
 "176
 [e :U 2670 ]
-[; ;main.c: 177: PORTCbits.RC4 = 0;
+[; ;main.c: 177: PORTCbits.RC5 = 0;
 "177
-[e = . . _PORTCbits 0 4 -> -> 0 `i `uc ]
+[e = . . _PORTCbits 0 5 -> -> 0 `i `uc ]
 [; ;main.c: 178: for (a = 0; a < 16; a++) {
 "178
 {
@@ -17830,18 +17830,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 "180
 }
 [; ;main.c: 180: }
-[; ;main.c: 181: PORTCbits.RC5 = 1;
+[; ;main.c: 181: PORTCbits.RC4 = 1;
 "181
-[e = . . _PORTCbits 0 5 -> -> 1 `i `uc ]
+[e = . . _PORTCbits 0 4 -> -> 1 `i `uc ]
 [; ;main.c: 182: break;
 "182
 [e $U 2648  ]
 [; ;main.c: 184: case 6:
 "184
 [e :U 2674 ]
-[; ;main.c: 185: PORTCbits.RC5 = 0;
+[; ;main.c: 185: PORTCbits.RC4 = 0;
 "185
-[e = . . _PORTCbits 0 5 -> -> 0 `i `uc ]
+[e = . . _PORTCbits 0 4 -> -> 0 `i `uc ]
 [; ;main.c: 186: for (a = 0; a < 16; a++) {
 "186
 {
@@ -17917,11 +17917,11 @@ Version 3.2 HI-TECH Software Intermediate Code
  2648 ]
 "199
 [e :U 2648 ]
-[; ;main.c: 200: for (d = 0; d < 600; d++) {
+[; ;main.c: 200: for (d = 0; d < 500; d++) {
 "200
 {
 [e = _d -> -> 0 `i `l ]
-[e $ < _d -> -> 600 `i `l 2682  ]
+[e $ < _d -> -> 500 `i `l 2682  ]
 [e $U 2683  ]
 [e :U 2682 ]
 {
@@ -17929,7 +17929,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 "200
 [e ++ _d -> -> 1 `i `l ]
-[e $ < _d -> -> 600 `i `l 2682  ]
+[e $ < _d -> -> 500 `i `l 2682  ]
 [e :U 2683 ]
 "201
 }
