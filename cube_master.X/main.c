@@ -197,6 +197,6 @@ void multiplexeur(char n) {
             etage7 = 1;
             break;
     }
-    for (d = 0; d < 500; d++) {
+    for (d = 0; d < 750; d++) {
     }
 }

@@ -12,7 +12,7 @@ script interface_souris_ftdi_PCtoPIC.py
 
 Cube8x8x8
 
-Created by Robin Beilvert, 3 lines written by Ale*xandre Proux and Felix is watching
+Created by Robin Beilvert, 3 lines written by Alexandre Proux and Felix is watching
 """
 
 # Bibliothèques pour ftdi, calculs et gestion du temps
@@ -59,16 +59,7 @@ pix_size=50
 # Variable logique d'envoi des trames (en cours ou pas)
 envoiState=FALSE;
 
-M1 = []
-for i in range(lignes*etages):
-	M1.append([0] * colonnes)
-
-M2 = []
-for i in range(lignes*etages):
-	M2.append([0] * colonnes)
-
-
-
+M = []
 
 ###################################### Thread d'envoi de trame ######################################
 
@@ -77,62 +68,37 @@ class Envoi_Trame(Thread):
 	def __init__(self):
 		Thread.__init__(self)
 		self._arret = False
-		logs = open('Patterns//alex_cubes.txt','r')
-		for k in range(etages):	
-			for i in range(lignes):
-				for j in range(colonnes):
-					for couleur_pixel in range(5):
-						# L'appel à logs.read(1) fait avancer la lecture d'un caractère :
-						# On se remet à la bonne position avec logs.seek()
-						logs.seek(8*i+j+64*k,0)
-						if logs.read(1) == "%s" %couleur_pixel :
-							M1[i+8*k][j]=couleur_pixel
 
-		logs = open('Patterns//alex_cubeb.txt','r')
-		for k in range(etages):				
-			for i in range(lignes):
-				for j in range(colonnes):
-					for couleur_pixel in range(5):
-						# L'appel à logs.read(1) fait avancer la lecture d'un caractère :
-						# On se remet à la bonne position avec logs.seek()
-						logs.seek(8*i+j+64*k,0)
-						if logs.read(1) == "%s" %couleur_pixel :
-							M2[i+8*k][j]=couleur_pixel
+		for i in range(lignes*etages*(liste_trame.size()//2)):
+			M.append([0] * colonnes)
 
-
-	def run(self):
-		
-		global M1
-		global M2
-		numPattern=0
-		while not self._arret:	
-			"""
-			filename = liste_trame.get(2*numPattern)
+		for patt in range(liste_trame.size()//2):
+			filename = liste_trame.get(2*patt)
 			#print(filename)
-			logs = open("Patterns//%s.txt" %filename,"r")
-			for k in range(etages):	
+			logs = open('Patterns//%s.txt' %filename,'r')
+			for k in range(etages):
 				for i in range(lignes):
 					for j in range(colonnes):
 						for couleur_pixel in range(5):
 							# L'appel à logs.read(1) fait avancer la lecture d'un caractère :
 							# On se remet à la bonne position avec logs.seek()
-							logs1.seek(8*i+j+64*k,0)
-							if logs1.read(1) == "%s" %couleur_pixel :
-								matrice_leds[i+8*k][j]=couleur_pixel
-			"""
+							logs.seek(8*i+j+64*k,0)
+							if logs.read(1) == "%s" %couleur_pixel :
+								M[i+8*k+64*patt][j]=couleur_pixel
+
+	def run(self):
+		
+		global M
+
+		numPattern=0
+		while not self._arret:	
+
 			for k in range(etages):				
 				for i in range(lignes):
 					for j in range(colonnes):
-						matrice_leds[i+8*k][j]=M1[i+8*k][j]
+						matrice_leds[i+8*k][j]=M[i+8*k+64*numPattern][j]
 			Envoyer()
-			sleep(0.5)
-			for k in range(etages):				
-				for i in range(lignes):
-					for j in range(colonnes):
-						matrice_leds[i+8*k][j]=M2[i+8*k][j]
-			Envoyer()
-			sleep(0.5)
-			"""	
+
 			# On attend le bon délai entre deux patterns
 			delaistring=liste_trame.get(2*numPattern+1)
 			sleep(int(delaistring[1:len(delaistring)-4])/1000.)
@@ -140,7 +106,8 @@ class Envoi_Trame(Thread):
 			numPattern+=1
 			if numPattern==liste_trame.size()//2:
 				numPattern=0
-			"""		
+
+		M = []
 		print ("Terminé !")
 
 	def stop(self):
@@ -473,12 +440,10 @@ def Ajouter_Pattern():
 	if liste_save.curselection() != ():
 		liste_trame.insert(END, liste_save.get(liste_save.curselection()))
 
-		if delai_field.get()=='' or int(delai_field.get()) in range(26):
-			liste_trame.insert(END, "(25 ms)")
-		elif int(delai_field.get()) in range(10000):	
+		if delai_field.get()=='':
+			liste_trame.insert(END, "(100 ms)")
+		else:	
 			liste_trame.insert(END, "(%s ms)" %delai_field.get())
-		else:
-			liste_trame.insert(END, "(10000 ms)")	
 
 		
 def Enlever_Pattern():
@@ -616,6 +581,29 @@ Button(Gestion_Trames, text ='Enlever', command = Enlever_Pattern, width=8).grid
 Bouton_EnvoiTrames=Button(Gestion_Trames, text ='Envoyer\nla trame !', command = Envoyer_Trame,\
 													height=4, width=20, fg='purple',cursor='hand1')
 Bouton_EnvoiTrames.grid(row=8, column=0, columnspan=2, pady=10)
+#####################################################################################################
+
+
+#####################################################################################################
+####################################### Gestion de fonctions ########################################
+#####################################################################################################
+Gestion_Fonctions = Canvas(Mafenetre, highlightthickness=0)
+Gestion_Fonctions.grid(row=1, column=9, rowspan=1, padx=10)
+
+Label(Gestion_Fonctions, text="Coordonées souhaitées").grid(row=0, column=0, columnspan=2)
+
+Label(Gestion_Fonctions, text="X(t) =").grid(row=1, column=0)
+X_field= Entry(Gestion_Fonctions, width=9)
+X_field.grid(row=1, column=1, pady=5)
+
+Label(Gestion_Fonctions, text="Y(t) =").grid(row=2, column=0)
+Y_field= Entry(Gestion_Fonctions, width=9)
+Y_field.grid(row=2, column=1, pady=5)
+
+Label(Gestion_Fonctions, text="Z(t) =").grid(row=3, column=0)
+Z_field= Entry(Gestion_Fonctions, width=9)
+Z_field.grid(row=3, column=1, pady=5)
+
 #####################################################################################################
 
 # On remplit le canevas principal et les étages de carrés blancs
