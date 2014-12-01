@@ -69,7 +69,6 @@ M = []
 ################################ Thread d'envoi de trame enregistrée ################################
 #####################################################################################################
 class Envoi_Trame(Thread):
-	''' Envoi des trames dans un thread séparé. '''
 	def __init__(self):
 		Thread.__init__(self)
 		self._arret = False
@@ -127,7 +126,6 @@ class Envoi_Trame(Thread):
 ################################ Thread d'envoi de trame de fonction ################################
 #####################################################################################################
 class Envoi_FoncTrame(Thread):
-	''' Envoi des trames dans un thread séparé. '''
 	def __init__(self):
 		Thread.__init__(self)
 		self._arret = False
@@ -135,11 +133,39 @@ class Envoi_FoncTrame(Thread):
 	def run(self):
 		t=0
 		while not self._arret:
-			Xval=eval(X_field.get())
-			#Xstring='Xval='+X_field.get()
-			#print (Xstring)
-			#exec('Xstring')
-			print(Xval)
+			try:
+				Xval=eval(X_field.get())
+			except Exception:
+				Xval=0
+			try:
+				Yval=eval(Y_field.get())
+			except Exception:
+				Yval=0
+			try:
+				Zval=eval(Z_field.get())
+			except Exception:
+				Zval=0
+
+			Xval=int(Xval)
+			Yval=int(Yval)
+			Zval=int(Zval)
+
+			print (Xval,Yval,Zval)
+			global matrice_leds
+			matrice_leds = []
+			for i in range(lignes*etages):
+				matrice_leds.append([0] * colonnes)
+			
+			#for k in range(etages):		
+			#	for i in range(lignes):
+			#		for j in range(colonnes):
+			#			matrice_leds[i+8*k][j]=M[i+8*k+64*numPattern][j]
+
+			matrice_leds[7-Yval%8 + 8*(7-Zval%8)][Xval%8]=3
+
+			print (matrice_leds)
+
+			Envoyer()
 
 			t=t+1
 			# On attend le bon délai entre deux patterns
@@ -148,23 +174,6 @@ class Envoi_FoncTrame(Thread):
 			else:
 				sleep(0.1)
 
-			#WORK TO DO  IN PROGRESS 
-			#while not self._arret:	
-
-			#	for k in range(etages):				
-			#		for i in range(lignes):
-			#			for j in range(colonnes):
-			#				matrice_leds[i+8*k][j]=M[i+8*k+64*numPattern][j]
-			#	Envoyer()
-
-			#	# On attend le bon délai entre deux patterns
-			#	delaistring=liste_trame.get(2*numPattern+1)
-			#	sleep(int(delaistring[1:len(delaistring)-4])/1000.)
-
-			#	numPattern+=1
-			#	if numPattern==liste_trame.size()//2:
-			#		numPattern=0
-			#M = []
 
 		MAJ_Couleurs(0)
 		MAJ_Couleurs(1)
