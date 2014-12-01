@@ -16,7 +16,8 @@ Created by Robin Beilvert, 3 lines written by Alexandre Proux and Felix is watch
 """
 
 # Bibliothèques pour ftdi, calculs et gestion du temps
-import sys, math
+import sys
+from math import *
 from pylibftdi import Device
 from time import sleep
 
@@ -31,13 +32,14 @@ except ImportError:
 # Gestionnaire de threads
 from threading import Thread
 
+# Gestionnaire de fichiers
 import os
 
-# Une ligne correspond à un PIC
+# Nombre de lignes
 lignes = 8
-# Une colonne correspond à une diode pour un PIC donné
+# Nombre de colonnes
 colonnes = 8
-# 8 étages
+# Nombre de étages
 etages = 8
 
 # Etage affiché dans le canevas principal
@@ -58,11 +60,14 @@ pix_size=50
 
 # Variable logique d'envoi des trames (en cours ou pas)
 envoiState=FALSE;
+envoiFoncState=FALSE;
 
+# Matrice tampon pour l'envoi de trames
 M = []
 
-###################################### Thread d'envoi de trame ######################################
-
+#####################################################################################################
+################################ Thread d'envoi de trame enregistrée ################################
+#####################################################################################################
 class Envoi_Trame(Thread):
 	''' Envoi des trames dans un thread séparé. '''
 	def __init__(self):
@@ -108,29 +113,120 @@ class Envoi_Trame(Thread):
 				numPattern=0
 
 		M = []
+		MAJ_Couleurs(0)
+		MAJ_Couleurs(1)
 		print ("Terminé !")
 
 	def stop(self):
 		self._arret = True
-
+#####################################################################################################
 #####################################################################################################
 
+
+#####################################################################################################
+################################ Thread d'envoi de trame de fonction ################################
+#####################################################################################################
+class Envoi_FoncTrame(Thread):
+	''' Envoi des trames dans un thread séparé. '''
+	def __init__(self):
+		Thread.__init__(self)
+		self._arret = False
+
+	def run(self):
+		t=0
+		while not self._arret:
+			Xval=eval(X_field.get())
+			#Xstring='Xval='+X_field.get()
+			#print (Xstring)
+			#exec('Xstring')
+			print(Xval)
+
+			t=t+1
+			# On attend le bon délai entre deux patterns
+			if delai_field.get()!='':
+				sleep(int(delai_field.get())/1000.)
+			else:
+				sleep(0.1)
+
+			#WORK TO DO  IN PROGRESS 
+			#while not self._arret:	
+
+			#	for k in range(etages):				
+			#		for i in range(lignes):
+			#			for j in range(colonnes):
+			#				matrice_leds[i+8*k][j]=M[i+8*k+64*numPattern][j]
+			#	Envoyer()
+
+			#	# On attend le bon délai entre deux patterns
+			#	delaistring=liste_trame.get(2*numPattern+1)
+			#	sleep(int(delaistring[1:len(delaistring)-4])/1000.)
+
+			#	numPattern+=1
+			#	if numPattern==liste_trame.size()//2:
+			#		numPattern=0
+			#M = []
+
+		MAJ_Couleurs(0)
+		MAJ_Couleurs(1)
+		print ("Terminé !")
+
+	def stop(self):
+		self._arret = True
+#####################################################################################################
+#####################################################################################################
+
+
+
+
+
 def Envoyer_Trame():
+	global envoiState
+	global envoiFoncState
+	# Envoi d'une trame enregistrée
+	if trameselect.get()==0:
+		# Si une trame de fonction est en cours d'envoi, on l'arrête :
+		if envoiFoncState:
+			global envoiFoncTrame
+			Bouton_EnvoiTrames.config(text='Envoyer\nla trame !',fg='purple')
+			envoiFoncTrame.stop() 	# On arrête l'envoi
+			envoiFoncState=~envoiState
+		# Si la liste de patterns n'est pas vide, on envoie ce qu'elle contient :
+		if 	liste_trame.size()!=0:
+			# Si un envoi est déjà en cours, on l'arrête :
+			if envoiState:	
+				global envoiTrame
+				Bouton_EnvoiTrames.config(text='Envoyer\nla trame !',fg='purple')
+				envoiTrame.stop() 	# On arrête l'envoi	
+			# Si aucun envoi n'est en cours, on envoie la trame :	
+			else:
+				Bouton_EnvoiTrames.config(text="Arrêter\nl'envoi",fg='brown')
+				envoiTrame = Envoi_Trame()
+				envoiTrame.start()  # On démarre l'envoi
+			# Inversion de l'état d'envoi	
+			envoiState=~envoiState
+		else :
+			print('Trame vide...')
 
-	if 	liste_trame.size()!=0 :
-		global envoiState
-		envoiState=~envoiState
-
-		if(envoiState):
-			Bouton_EnvoiTrames.config(text="Arrêter\nl'envoi",fg='brown')
-			global envoiTrame
-			envoiTrame = Envoi_Trame()
-			envoiTrame.start()  # On démarre l'envoi
-		else:
+	# Envoi d'une trame de fonction
+	else :
+		# Si une trame enregistrée est en cours d'envoi, on l'arrête :
+		if envoiState:
+			#global envoiTrame
 			Bouton_EnvoiTrames.config(text='Envoyer\nla trame !',fg='purple')
 			envoiTrame.stop() 	# On arrête l'envoi
-	else :
-		print('Trame vide...')
+			envoiState=~envoiState
+		# Si un envoi est déjà en cours, on l'arrête :
+		if envoiFoncState:
+			#global envoiFoncTrame
+			Bouton_EnvoiTrames.config(text='Envoyer\nla trame !',fg='purple')
+			envoiFoncTrame.stop() 	# On arrête l'envoi	
+		# Si aucun envoi n'est en cours, on envoie la trame :
+		else:
+			Bouton_EnvoiTrames.config(text="Arrêter\nl'envoi",fg='brown')
+			envoiFoncTrame = Envoi_FoncTrame()
+			envoiFoncTrame.start()  # On démarre l'envoi
+		# Inversion de l'état d'envoi	
+		envoiFoncState=~envoiFoncState
 
 
 def Change_couleur(i,j):
@@ -457,12 +553,10 @@ def Modif_Delai():
 		liste_trame.delete(2*(n//2)+1)
 		liste_trame.insert(2*(n//2)+1, "(%s ms)" %delai_field.get())		
 
-
 #####################################################################################################
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##
 #####################################################################################################
-#####################################################################################################
-#####################################################################################################
-
 
 
 # Création de la fenêtre principale
@@ -480,9 +574,8 @@ Boutons = Canvas(Mafenetre, width = 100, height =100)
 
 
 
-
 #####################################################################################################
-######################## Création de la ligne avec les étages et les flèches ########################
+##~~~~~~~~~~~~~~~~~~~~~~ Création de la ligne avec les étages et les flèches ~~~~~~~~~~~~~~~~~~~~~~##
 #####################################################################################################
 Etages = Canvas(Mafenetre, width = 8*51, height=50)
 
@@ -498,14 +591,16 @@ photo_flechedroite = PhotoImage(file="fleche_droite.png")
 Fleche_droite.create_image(0, 0, image=photo_flechedroite, anchor=NW)
 
 Etages.grid(row=0, column=1, columnspan=5, pady=5)
-#####################################################################################################
 
 # On lie les flèches du clavier aux flèches de sélection des étages
 Fleche_gauche.bind('<Button-1>', ChangeEtage)
 Fleche_droite.bind('<Button-1>', ChangeEtage)
+#####################################################################################################
+
+
 
 #####################################################################################################
-######################### Création du canevas principal (matrice colorée) ###########################
+##~~~~~~~~~~~~~~~~~~~~~~~ Création du canevas principal (matrice colorée) ~~~~~~~~~~~~~~~~~~~~~~~~~##
 #####################################################################################################
 Hauteur = lignes*pix_size
 Largeur = colonnes*pix_size
@@ -519,8 +614,9 @@ Canevas.grid(row=1, column=1, columnspan=5)
 #####################################################################################################
 
 
+
 #####################################################################################################
-###### Boutons de sélection de la zone concernée par les entrées au clavier et image du clavier #####
+##~~~~ Boutons de sélection de la zone concernée par les entrées au clavier et image du clavier ~~~##
 #####################################################################################################
 Boutons = Canvas(Mafenetre, width = 100, height =100, highlightthickness=0)
 
@@ -540,8 +636,9 @@ Boutons.grid(row=2, column=1, columnspan=5, pady=5)
 #####################################################################################################
 
 
+
 #####################################################################################################
-################################## Gestion des trames de patterns ###################################
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Gestion des trames de patterns ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##
 #####################################################################################################
 Gestion_Trames = Canvas(Mafenetre, highlightthickness=0)
 Gestion_Trames.grid(row=0, column=7, rowspan=3, padx=10)
@@ -567,43 +664,59 @@ Fleche_bas.create_image(0, 0, image=photo_flechebas, anchor=NW)
 #Fleche_haut.bind('<Button-1>', fonction)
 #Fleche_bas.bind('<Button-1>', fonction)
 
-Button(Gestion_Trames, text ='Delai :', command = Modif_Delai, width=7).grid(row=4, column=0, pady=5)
-delai_field= Entry(Gestion_Trames, width=9)
-delai_field.grid(row=4, column=1, pady=5)
-
-Label(Gestion_Trames, text="Trame envoyée").grid(row=5, column=0, columnspan=2)
+Label(Gestion_Trames, text="Trame envoyée").grid(row=4, column=0, columnspan=3)
 liste_trame = Listbox(Gestion_Trames, width=24, height=15)
-liste_trame.grid(row=6, column=0, columnspan=2)
+liste_trame.grid(row=5, column=0, columnspan=2)
 
-Button(Gestion_Trames, text ='Ajouter', command = Ajouter_Pattern, width=8).grid(row=7, column=0, pady=5)
-Button(Gestion_Trames, text ='Enlever', command = Enlever_Pattern, width=8).grid(row=7, column=1, pady=5)
+Button(Gestion_Trames, text ='Ajouter', command = Ajouter_Pattern, width=8).grid(row=6, column=0, pady=6)
+Button(Gestion_Trames, text ='Enlever', command = Enlever_Pattern, width=8).grid(row=6, column=1, pady=6)
 
-Bouton_EnvoiTrames=Button(Gestion_Trames, text ='Envoyer\nla trame !', command = Envoyer_Trame,\
-													height=4, width=20, fg='purple',cursor='hand1')
-Bouton_EnvoiTrames.grid(row=8, column=0, columnspan=2, pady=10)
+Button(Gestion_Trames, text ='Délai :', command = Modif_Delai, width=8).grid(row=7, column=0, pady=5)
+delai_field= Entry(Gestion_Trames, width=9)
+delai_field.grid(row=7, column=1)
+Label(Gestion_Trames, text="(Par défaut : 100ms)").grid(row=8, column=0, columnspan=2)
 #####################################################################################################
 
 
+
+
 #####################################################################################################
-####################################### Gestion de fonctions ########################################
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Gestion de fonctions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##
 #####################################################################################################
 Gestion_Fonctions = Canvas(Mafenetre, highlightthickness=0)
-Gestion_Fonctions.grid(row=1, column=9, rowspan=1, padx=10)
+Gestion_Fonctions.grid(row=1, column=8, padx=10)
 
 Label(Gestion_Fonctions, text="Coordonées souhaitées").grid(row=0, column=0, columnspan=2)
 
-Label(Gestion_Fonctions, text="X(t) =").grid(row=1, column=0)
+Label(Gestion_Fonctions, text="X(t) =").grid(row=1)
 X_field= Entry(Gestion_Fonctions, width=9)
 X_field.grid(row=1, column=1, pady=5)
 
-Label(Gestion_Fonctions, text="Y(t) =").grid(row=2, column=0)
+Label(Gestion_Fonctions, text="Y(t) =").grid(row=2)
 Y_field= Entry(Gestion_Fonctions, width=9)
 Y_field.grid(row=2, column=1, pady=5)
 
-Label(Gestion_Fonctions, text="Z(t) =").grid(row=3, column=0)
+Label(Gestion_Fonctions, text="Z(t) =").grid(row=3)
 Z_field= Entry(Gestion_Fonctions, width=9)
 Z_field.grid(row=3, column=1, pady=5)
+#####################################################################################################
 
+
+
+
+#####################################################################################################
+#####################################################################################################
+Boutons_Envoi = Canvas(Gestion_Fonctions, highlightthickness=0)
+Boutons_Envoi.grid(row=4, columnspan=2, pady=40)
+
+trameselect=IntVar()
+trameselect.set(0)
+Radiobutton(Boutons_Envoi, text="Trame\nenregistrée", variable=trameselect, value=0, indicatoron=0, height=2, width=10).grid(row=0)
+Radiobutton(Boutons_Envoi, text="Fonction 3D", variable=trameselect, value=1, indicatoron=0, height=2, width=10).grid(row=0, column=1)
+
+Bouton_EnvoiTrames=Button(Boutons_Envoi, text ='Envoyer\nla trame !', command = Envoyer_Trame,\
+													height=4, width=19, fg='purple',cursor='hand1')
+Bouton_EnvoiTrames.grid(row=1, columnspan=2, pady=10)
 #####################################################################################################
 
 # On remplit le canevas principal et les étages de carrés blancs
