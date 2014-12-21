@@ -18,7 +18,12 @@ Created by Robin Beilvert, 3 lines written by Alexandre Proux and Felix is watch
 # Bibliothèques pour ftdi, calculs et gestion du temps
 import sys
 from math import *
-from pylibftdi import Device
+
+##### Ancienne librairie #####
+# from pylibftdi import Device
+##### Nouvelle librairie #####
+from serial import * 
+
 from time import sleep
 
 # Bibliothèque pour interface graphique
@@ -135,7 +140,7 @@ class Envoi_FoncTrame(Thread):
 		while not self._arret:
 			try:
 				Xval=eval(X_field.get())
-			except Exception:
+			except:
 				Xval=0
 			try:
 				Yval=eval(Y_field.get())
@@ -146,9 +151,18 @@ class Envoi_FoncTrame(Thread):
 			except Exception:
 				Zval=0
 
-			Xval=int(Xval)
-			Yval=int(Yval)
-			Zval=int(Zval)
+			try:
+				Xval=int(Xval)
+			except Exception:
+				Xval=0
+			try:
+				Yval=int(Yval)
+			except Exception:
+				Yval=0
+			try:
+				Zval=int(Zval)
+			except Exception:
+				Zval=0
 
 			print (Xval,Yval,Zval)
 			global matrice_leds
@@ -156,14 +170,15 @@ class Envoi_FoncTrame(Thread):
 			for i in range(lignes*etages):
 				matrice_leds.append([0] * colonnes)
 			
-			#for k in range(etages):		
-			#	for i in range(lignes):
-			#		for j in range(colonnes):
-			#			matrice_leds[i+8*k][j]=M[i+8*k+64*numPattern][j]
+			for k in range(etages):		
+				for i in range(lignes):
+					for j in range(colonnes):
+						if (7-Yval%8)==i and (Xval%8)==j:
+							matrice_leds[i+8*k][j]=3
 
-			matrice_leds[7-Yval%8 + 8*(7-Zval%8)][Xval%8]=3
+			#matrice_leds[7-Yval%8 + 8*(7-Zval%8)][Xval%8]=3
 
-			print (matrice_leds)
+			#print (matrice_leds)
 
 			Envoyer()
 
@@ -353,6 +368,8 @@ def Envoyer():
 	#print ("Second octet bleu = %s" % bin(octets_bleus[0][1]))	
 	#print ("Second octet rouge = %s" % bin(octets_rouges[0][1]))
 
+	""" 	
+	######## Avec l'ancienne librairie pylibftdi ########
 	try:
 		# On envoie la sauce !
 		with Device (mode = 't') as dev:
@@ -368,8 +385,21 @@ def Envoyer():
 		#if envoiState:
 		#	Envoyer_Trame()
 		print('FTDI non détecté')
+	"""	
 	
-
+	try:
+		# On envoie la sauce !
+		dev = Serial('/dev/ttyUSB0', 115200)
+		# 8 étages
+		for k in range(etages) :
+			# 8 PICs = 8 lignes bicolores
+			for i in range (lignes) :
+				dev.write(chr(octets_bleus[k][i]).encode())
+				dev.write(chr(octets_rouges[k][i]).encode())
+	except Exception:	
+		#if envoiState:
+		#	Envoyer_Trame()
+		print('FTDI non détecté')
 
 def Init():
 
