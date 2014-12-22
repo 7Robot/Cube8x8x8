@@ -344,12 +344,14 @@ def ActualiserCube():
 	# On balance la sauce !!!
 	Envoyer()
 	
-	# On rapelle cette fonction dans 100 ms (raffraichissement du cube)
+	# Vitesse du snake en fonction de la difficulté demandée
+	vitesse=440-40*echelle.get()
+	# On rapelle cette fonction dans "vitesse" ms (raffraichissement du cube)
 	# !!! Ne pas mettre zéro sinon les interruption du clavier ne pourront plus se lancer !!!
 	# Seulement si on est pas en pause
 	# FIXME : Un variable pour gérer la vitesse serait sympa
 	if (pause != 1):
-		Mafenetre.after(100,ActualiserCube)
+		Mafenetre.after(vitesse,ActualiserCube)
 
 
 
@@ -459,7 +461,7 @@ try:
     fail_sound = mixer.Sound("Sound/doh.wav")
     wall_sound = mixer.Sound("Sound/wall.wav")
 except:
-    prompt = "Error: Sound file not found"
+    print("Error: Sound file not found")
 
 # ~~~~~~~~~~~~~~~~~~~ Fenêtre principale ~~~~~~~~~~~~~~~~~~~
 def Start():
@@ -478,8 +480,13 @@ def Start():
 
 	# On met une ligne au dessus avec le niveau indiqué
 	Entete.grid(row=0, column=0)
+
+	# On affiche l'echelle de difficulté
+	echelle.grid(row=2,  column=0)
+
+	# Indication des commandes disponibles
 	Commandes = Label(Mafenetre, text="\nEchap : Quitter le jeu\nSpace : Mode pause\nEnter : Recommencer la partie", anchor=NW , justify=LEFT)
-	Commandes.grid(row=2, column=0, sticky = W, padx = 5)
+	Commandes.grid(row=3, column=0, sticky = W, padx = 5)
 
 	# Un appui sur le clavier appelle la fonction Touche() qui actualisera la direction
 	Mafenetre.bind('<Key>', Touche)
@@ -495,4 +502,9 @@ Mafenetre = Tk()
 # On met en cache la couleur de fond pour plus tard
 DefClr = Mafenetre.cget("bg")
 Entete = Label(Mafenetre, text="Niveau : 0")
+
+# Création d'un widget Scale pour la gestion de la difficulté
+echelle = Scale(Mafenetre,from_=0,to=10,resolution=1,orient=HORIZONTAL,\
+length=300,width=20,label="Difficulté")
+
 Start()
