@@ -1,4 +1,5 @@
-#!/usr/bin/env python # -*- coding: utf8 -*-
+#!/usr/bin/env python 
+# -*- coding: utf8 -*-
 
 #######################################
 #                                     # 
@@ -15,7 +16,7 @@
 #
 # Dimensions maximales du cube : 9x9x9
 # 
-# Requis : python, python-tk, pylibftdi
+# Requis : python, python-tk, pyserial
 #
 # Fonctionnalités :
 #    * Déplacement du snake

@@ -1,4 +1,5 @@
-#!/usr/bin/env python # -*- coding: utf8 -*-
+#!/usr/bin/env python 
+# -*- coding: utf8 -*-
 
 """
 script interface_souris_ftdi_PCtoPIC.py
@@ -292,8 +293,10 @@ def Touche(event):
 	touche = event.keysym
 	#print(liste_trame.size())
 
+
+
 	if touche=='Escape':
-		Mafenetre.destroy()
+		Mafenetre.destroy()		
 
 	if touche=='asterisk':
 		Init()
