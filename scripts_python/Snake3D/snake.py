@@ -25,7 +25,9 @@
 #    * Couleurs (champi rouge, tête violet, corps bleu (ou rouge si mort))
 #    * Un mode pause (actif au lancement)
 #
-# Auteurs : Robin, Léo (et autres)
+# Auteurs : Léo
+#			Robin (Gestion d'envoi des trames au Cube, gestion du son)
+
 
 
 # ~~~~~~~~~~~~~~~~~~~ Bibliothèques ~~~~~~~~~~~~~~~~~~~
@@ -266,8 +268,10 @@ def ActualiserCube():
 	if(perdu != 1 and (snake[0][0] < 0 or snake[0][1] < 0 or snake[0][2] < 0 or snake[0][0] > dimension-1 or snake[0][1] > dimension-1 or snake[0][2] > dimension-1)):
 		# On joue un bruit de merde
 		wall_sound.play()
-		# On passe le drapeu à 1
+		# On passe le drapeau à 1
 		perdu = 1
+		# On arrête la musique
+		music.stop()
 		# On fait reculer le snake pour anuler l'avancement qui n'as pas lieu d'être
 		snake.rotate(-1)
 		# On restitue la queue au snake (car elle a été effacée précédement)
@@ -276,10 +280,14 @@ def ActualiserCube():
 	# Pour chaque morceau de snake (tête exclue) on regarde si il n'est pas à la même position que la tête
 	for i in range(4,len(snake)):
 		if(snake[0][0] == snake[i][0] and snake[0][1] == snake[i][1] and snake[0][2] == snake[i][2]):
+			fail_sound.play()
 			perdu = 1
+			music.stop()
 
 	# Si le snake mange un champignon (si sa tête a la position d'un champignon)
 	if(snake[0][0] == champi[0] and snake[0][1] == champi[1] and snake[0][2] == champi[2]):
+		# On joue un son de bouffe
+		eat_sound.play()
 		# On génère un champignon à une position aléatoire
 		champi[0] = randint(0, dimension-1)
 		champi[1] = randint(0, dimension-1)
@@ -365,13 +373,15 @@ def Touche(event):
 	if (touche=='Return'):
 		Init()
 		Start()
-	# Si on presse espace on se met en pause ou on en sort
-	if (touche=='space'):
+	# Si on presse espace et qu'on n'a pas perdu on se met en pause ou on en sort
+	if (touche=='space' and perdu == 0):
 		if (pause == 1):
 			pause = 0
+			music.play(-1)
 			ActualiserCube()
 		else:
 			pause = 1
+			music.stop()
 	# Dans un cas autre, on actualise la direction
 	elif (touche=='Up' and last_direction != 'down'):
 		direction = 'up'
@@ -439,11 +449,26 @@ def Update_Scores():
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##
 #####################################################################################################
 
+# ~~~~~~~~~~~~~~~~~~~ Gestion de l'audio ~~~~~~~~~~~~~~~~~~~
+# Initialize the pygame mixer
+mixer.init(44100)
+try:
+    # Create the sound instances
+    music = mixer.Sound("Sound/music.ogg")
+    eat_sound = mixer.Sound("Sound/eat.wav") 
+    fail_sound = mixer.Sound("Sound/doh.wav")
+    wall_sound = mixer.Sound("Sound/wall.wav")
+except:
+    prompt = "Error: Sound file not found"
+
 # ~~~~~~~~~~~~~~~~~~~ Fenêtre principale ~~~~~~~~~~~~~~~~~~~
 def Start():
 	global Mafenetre
 	global Entete
 	Mafenetre.title('Snake 3D')
+
+	# Au départ, la musique est arrêtée
+	music.stop()
 
 	# On affiche l'image avec les contrôles
 	ImgDirections = Canvas(Mafenetre, width=216, height=216)
@@ -466,14 +491,6 @@ def Start():
 Nom_Joueur()
 # Les champs de la fenêtre et la fenêtre doivent être globaux
 Mafenetre = Tk()
-
-# Initialize the pygame mixer
-mixer.init(44100)
-try:
-    # Create the sound instances
-    wall_sound = mixer.Sound("wall.wav")
-except:
-    prompt = "Error: Sound file not found"
 
 # On met en cache la couleur de fond pour plus tard
 DefClr = Mafenetre.cget("bg")
