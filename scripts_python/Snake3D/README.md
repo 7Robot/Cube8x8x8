@@ -9,18 +9,18 @@ Installation
 
 #### pySerial :
 
-_Sous Archlinux :_
+__Sous Archlinux :__
 
-yaourt pyserial
+	yaourt pyserial
 
-_Sous Debian et dérivés :_
+__Sous Debian et dérivés :__
 
-sudo apt-get install pyserial
+	sudo apt-get install pyserial
 
 #### Pygame :
 
-sudo svn co svn://seul.org/svn/pygame/trunk pygame
+	sudo svn co svn://seul.org/svn/pygame/trunk pygame
 
-cd pygame
-sudo python3 setup.py build
-sudo python3 setup.py install
+	cd pygame
+	sudo python3 setup.py build
+	sudo python3 setup.py install
