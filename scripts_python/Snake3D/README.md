@@ -9,11 +9,13 @@ Installation
 
 #### pySerial :
 
+_Sous Archlinux :_
+
 yaourt pyserial
 
-=>	community/python-pyserial
-    	Multiplatform Serial Port Module for Python
+_Sous Debian et dérivés :_
 
+sudo apt-get install pyserial
 
 #### Pygame :
 
