@@ -9,11 +9,11 @@ Installation
 
 #### pySerial :
 
-__Sous Archlinux :__
+Sous Archlinux :
 
 	yaourt pyserial
 
-__Sous Debian et dérivés :__
+Sous Debian et dérivés :
 
 	sudo apt-get install pyserial
 
