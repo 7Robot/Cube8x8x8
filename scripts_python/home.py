@@ -5,11 +5,11 @@
 home.py
  ______  _____      _           _
 |___   || ___ \    | |         | |
-	/ / | |_/ /___ | |__   ___ | |_
+    / / | |_/ /___ | |__   ___ | |_
    / /  |    // _ \|  _ \ / _ \|  _|
   / /   | |\ \ (_) | |_) | (_) | |_
  /_/    |_| \_\___/|____/ \___/ \__|
-						7robot.fr
+			7robot.fr
 
 Cube8x8x8
 
@@ -57,7 +57,7 @@ Button(Mafenetre, text ='Interface de commande', command = Open_display_commands
 # Snake3D
 Button(Mafenetre, text ='Snake 3D', command = Open_snake).grid(row=1, column=1, padx=5, pady=5)
 
-# Un appui sur le clavier appelle la fonction Touche() qui actualisera la direction
+# Un appui sur le clavier appelle la fonction Touche()
 Mafenetre.bind('<Key>', Touche)
 
 Mafenetre.mainloop()
