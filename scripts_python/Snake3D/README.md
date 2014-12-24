@@ -19,6 +19,18 @@ Sous Debian et dérivés :
 
 #### Pygame :
 	
+__Python 2 :__
+
+Sous Archlinux :
+
+	yaourt pygame
+
+Sous Debian et dérivés :
+
+	sudo apt-get install pygame
+
+__Python 3 :__
+
 Sous Archlinux :
 
 	yaourt subversion
