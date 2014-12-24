@@ -77,7 +77,7 @@ last_direction = 'left'
 # Matrice des leds a allumer
 matrice_leds = []
 # Nom du joueur par défaut
-nom_joueur='anonyme'
+nom_joueur='Anonyme'
 
 
 def Init():
@@ -121,7 +121,7 @@ def Init():
 
 
 ##############################################################
-# Fonction d'envoi la matrice au ftdi (Auteur : Robin)
+# Fonction d'envoi de la matrice au ftdi (Auteur : Robin)
 # Nécessite la matrice_leds
 ##############################################################
 
@@ -180,6 +180,7 @@ def Envoyer():
 		print('FTDI non détecté')
 	"""	
 
+	######## Avec la nouvelle librairie pyserial ########
 	try:
 		# On envoie la sauce !
 		dev = Serial('/dev/ttyUSB0', 115200)
@@ -410,7 +411,7 @@ def Nom_Joueur():
 		global nom_joueur
 		if namefield.get() == '':
 			# Nom de joueur par défaut
-			nom_joueur='anonyme'
+			nom_joueur='Anonyme'
 			Name_Screen.destroy()
 		else :
 			# Si le joueur a donné un nom on l'enregistre
@@ -443,7 +444,7 @@ def Update_Scores():
 	# On ouvre le fichier en lecture écriture sans l'effacer
 	scores = open("scores.txt","a+")
 	# On ajoute à la fin le nom suivi du niveau
-	scores.write("%(nom)s,%(score)03d\r\n" %{"nom": nom_joueur, "score": len(snake)-3})
+	scores.write("%(nom)s,%(difficulte)2d,%(score)3d\r\n" %{"nom": nom_joueur, "difficulte": echelle.get(), "score": len(snake)-3})
 	scores.close()
 	
 
@@ -453,6 +454,8 @@ def Update_Scores():
 #####################################################################################################
 
 # ~~~~~~~~~~~~~~~~~~~ Gestion de l'audio ~~~~~~~~~~~~~~~~~~~
+# (Auteur : Robin)
+
 # Initialize the pygame mixer
 mixer.init(44100)
 try:
@@ -465,6 +468,8 @@ except:
     print("Error: Sound file not found")
 
 # ~~~~~~~~~~~~~~~~~~~ Fenêtre principale ~~~~~~~~~~~~~~~~~~~
+# (Auteurs : Léo & Robin)
+
 def Start():
 	global Mafenetre
 	global Entete
