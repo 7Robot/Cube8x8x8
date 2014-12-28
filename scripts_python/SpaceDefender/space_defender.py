@@ -33,17 +33,15 @@ Cube8x8x8
 
 # ~~~~~~~~~~~~~~~~~~~ Bibliothèques ~~~~~~~~~~~~~~~~~~~
 
-# Bibliothèques pour ftdi, calculs et gestion du temps
 import sys
-import os			# Permet de sauver des fichiers (scores)
-from math import *
-from serial import *		# Communication avec le port série 
-from collections import deque 	# Permet de faires des opérations avancés sur les listes (rotate)
-from random import randint    	# Permet de créer des chiffres aléatoires
-from time import sleep
-from pygame import mixer      	# Permet de jouer des sons
-
-from inspect import *
+import os						# Sauver des fichiers (scores)
+from math import *				# Utilisation de fonctions mathématiques
+from serial import *			# Communication avec le port série 
+from collections import deque 	# Opérations avancés sur les listes (rotate)
+from random import randint    	# Entiers aléatoires
+from time import sleep			# Pauses dans le programme
+from pygame import mixer      	# Jouer des sons
+from threading import Thread 	# Gestionnaire de threads
 
 # Bibliothèque pour interface graphique
 try:
@@ -53,22 +51,28 @@ except ImportError:
 	# for Python3
 	from tkinter import *
 
+# Dimension du cube
+dimension = 8
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~ Classes ~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 class Partie:
 
 	def __init__(self):
+		music.stop()		
 		try:
 			self.difficulty=NouvellePartie.difficulty
 		except Exception:
 			self.difficulty=0
-		# Délai d'actualisation : 480-4*difficulty
+		# Délai d'actualisation : 480-40*difficulty
 		self.nom_joueur="Anonyme"
 		self.Nom_Joueur()
 		self.pause=1
 		self.perdu=0
 		self.niveau=0
-		music.stop()
+		self.liste_attaquants=[]
 
 	def Nom_Joueur(self):
 		def Joueur(event):
@@ -137,18 +141,51 @@ class Vaisseau():
 		else:
 			laser.play()
 
+	# Cette fonction est appellée par la touche "q" si des bonus sont disponibles
 	def use_bonus(self):
-		# On remonte le nombre de tirs bonus disponibles
-		self.bonus_count=10
-		# Le bonus est utilisé, il n'est plus disponible
-		self.bonus_available=0
+		# On ajoute 10 tirs bonus disponibles
+		self.bonus_count+=10
+		# On décrémente le nombre de bonus disponibles
+		self.bonus_available-=1
 
 class Attaquant():
 	def __init__(self):
-		# Position initiale de l'attaquant dans le dernier plan du cube ([etage, ligne, colonne])
-		self.position=[4,0,3]
+		global dimension
+		# Position initiale aléatoire de l'attaquant dans le dernier plan du cube ([etage, ligne, colonne])
+		self.position=[randint(0, dimension-1),0,randint(0, dimension-1)]
+	def __del__(self):
+		shot.play()
 
+class Tir():
+	def __init__(self):
+		self.position=NouveauVaisseau.position
+class Laser(Tir):
+	def __init__(self):
+		Tir.__init()
+class LaserFat(Tir):
+	def __init__(self):
+		Tir.__init()
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~ Thread parallèle de partie en cours ~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+def PartieEnCours():
+	i=0
+	while True:
+		while NouvellePartie.pause==0:
+			if i%int(50-4*NouvellePartie.difficulty)==0:
+				print('test')
+
+			Envoyer()
+			i+=1
+			sleep(0.01)
+		sleep(0.1)		
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~ Fonctions ~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Un appui sur une touche appelle cette fonction gérant l'interactivité
 def Touche(event):
@@ -174,9 +211,16 @@ def Touche(event):
 		if 	(event.keysym=='q' and NouveauVaisseau.bonus_available!=0):
 			NouveauVaisseau.use_bonus()
 
+		#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#
 		# Touche de cheat pour donner des bonus	
 		if 	(event.keysym=='c'):
 			NouveauVaisseau.bonus_available+=1	
+
+		if 	(event.keysym=='a'):
+			NouvellePartie.liste_attaquants.append(Attaquant())
+			print(len(NouvellePartie.liste_attaquants))
+			print(NouveauVaisseau.position)
+		#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#	
 
 	# Si on presse espace et qu'on n'a pas perdu on se met en pause ou on en sort
 	if (event.keysym=='space' and NouvellePartie.perdu == 0):
@@ -187,7 +231,79 @@ def Touche(event):
 			NouvellePartie.pause = 1
 			music.stop()
 
+
+# Fonction d'envoi de la matrice au ftdi
+# Nécessite matrice_leds
+def Envoyer():
+	global dimension
+	# Matrice pour envoyer les infos de l'interface graphique au ftdi
+	M = []
+	for i in range(dimension*dimension):
+		M.append([0] * dimension)
+
+	# Etages
+	for k in range(dimension):	
+		# Lignes
+		for i in range(dimension) :
+			# Colonnes
+			for j in range(dimension) :	
+				# Détection du vaisseau (toujours sur la 7eme ligne)
+				if i==7 and NouveauVaisseau.position==[k, j]:
+					M[i+dimension*k][j]=3
+				# Détection des attaquants
+				for l in range(len(NouvellePartie.liste_attaquants)):
+					if NouvellePartie.liste_attaquants[l].position==[k, i, j]:	
+						M[i+dimension*k][j]=2
+
+	octets_rouges=[]				
+	octets_bleus=[]
+	for k in range(dimension):
+		octets_rouges.append([0] * dimension)
+		octets_bleus.append([0] * dimension)		
+
+	for k in range(dimension):	
+		# Indice pour chaque PIC
+		for i in range(dimension) :
+			# Indice pour chaque diode d'une ligne (= d'un PIC)
+			for j in range(dimension) :
+				
+				if i%2==0 and (j//4)%2==1:
+					l=1
+					c=-4
+				elif i%2==1 and (j//4)%2==0:
+					l=-1
+					c=4
+				else:
+					l=0
+					c=0
+
+				if  M[i+l+8*k][j+c] == 1:
+					octets_rouges[k][i] = octets_rouges[k][i]+2**j
+
+				elif M[i+l+8*k][j+c] == 2:                
+					octets_bleus[k][i] = octets_bleus[k][i]+2**j
+
+				elif M[i+l+8*k][j+c] == 3:
+					octets_rouges[k][i] = octets_rouges[k][i]+2**j
+					octets_bleus[k][i] = octets_bleus[k][i]+2**j
+
+	try:
+		# On envoie la sauce !
+		dev = Serial('/dev/ttyUSB0', 115200)
+		# 8 étages
+		for k in range(dimension) :
+			# 8 PICs = 8 lignes bicolores
+			for i in range (dimension) :
+				dev.write(chr(octets_bleus[k][i]).encode())
+				dev.write(chr(octets_rouges[k][i]).encode())
+	except Exception:	
+		#if envoiState:
+		#	Envoyer_Trame()
+		print('FTDI non détecté')
+		
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~ Gestion de l'audio ~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Initialize the pygame mixer
 mixer.init(44100)
@@ -197,12 +313,15 @@ try:
     woosh = mixer.Sound("Sound/woosh.wav")
     laser = mixer.Sound("Sound/laser.wav") 
     laser_fat = mixer.Sound("Sound/laser_fat.wav")
+    shot = mixer.Sound("Sound/shot.wav")
 
 except:
     print("Error: Sound file not found")
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~ Fenêtre principale ~~~~~~~~~~~~~~~~~~~
-	
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	
+
 Mafenetre = Tk()
 Mafenetre.title('Space Defender')
 
@@ -219,11 +338,12 @@ def NouvPart(event):
 	NouvellePartie=Partie()
 	global NouveauVaisseau
 	NouveauVaisseau=Vaisseau()
+	Thread(None, PartieEnCours).start()
+
 BoutonNouvPart = Button(Mafenetre, text = "Nouvelle Partie")
 BoutonNouvPart.bind("<Button-1>", NouvPart)
 Mafenetre.bind("<Return>", NouvPart)
 BoutonNouvPart.grid(padx=30, pady=5)
-
 
 Mafenetre.mainloop()
 

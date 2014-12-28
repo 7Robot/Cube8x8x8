@@ -351,7 +351,7 @@ def ActualiserCube():
 	# On rapelle cette fonction dans "vitesse" ms (raffraichissement du cube)
 	# !!! Ne pas mettre zéro sinon les interruption du clavier ne pourront plus se lancer !!!
 	# Seulement si on est pas en pause
-	# FIXME : Un variable pour gérer la vitesse serait sympa
+	# FIXME : Un variable pour gérer la vitesse serait sympa : DONE ! ^^ (Robin)
 	if (pause != 1):
 		Mafenetre.after(vitesse,ActualiserCube)
 
