@@ -21,9 +21,9 @@ import sys
 from math import *
 
 ##### Ancienne librairie #####
-# from pylibftdi import Device
+from pylibftdi import Device
 ##### Nouvelle librairie #####
-from serial import * 
+# from serial import * 
 
 from time import sleep
 
@@ -371,7 +371,7 @@ def Envoyer():
 	#print ("Second octet bleu = %s" % bin(octets_bleus[0][1]))	
 	#print ("Second octet rouge = %s" % bin(octets_rouges[0][1]))
 
-	""" 	
+	 	
 	######## Avec l'ancienne librairie pylibftdi ########
 	try:
 		# On envoie la sauce !
@@ -388,8 +388,8 @@ def Envoyer():
 		#if envoiState:
 		#	Envoyer_Trame()
 		print('FTDI non détecté')
-	"""	
 	
+	"""
 	try:
 		# On envoie la sauce !
 		dev = Serial('/dev/ttyUSB0', 115200)
@@ -403,7 +403,7 @@ def Envoyer():
 		#if envoiState:
 		#	Envoyer_Trame()
 		print('FTDI non détecté')
-
+	"""
 def Init():
 
 	##################################### Initialisation des étages #####################################

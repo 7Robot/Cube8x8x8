@@ -38,9 +38,9 @@ import sys
 import os					  # Permet de sauver des fichiers (scores)
 from math import *
 # Ancienne librairie :
-# from pylibftdi import Device
+from pylibftdi import Device
 # Nouvelle librairie :
-from serial import * 
+# from serial import * 
 from collections import deque # Permet de faires des opérations avancés sur les listes (rotate)
 from random import randint    # Permet de créer des chiffres aléatoires
 from time import sleep
@@ -160,8 +160,7 @@ def Envoyer():
 				elif matrice_leds[i+l+8*k][j+c] == 3:
 					octets_rouges[k][i] = octets_rouges[k][i]+2**j
 					octets_bleus[k][i] = octets_bleus[k][i]+2**j
-
-	""" 	
+	
 	######## Avec l'ancienne librairie pylibftdi ########
 	try:
 		# On envoie la sauce !
@@ -178,8 +177,8 @@ def Envoyer():
 		#if envoiState:
 		#	Envoyer_Trame()
 		print('FTDI non détecté')
-	"""	
 
+	"""
 	######## Avec la nouvelle librairie pyserial ########
 	try:
 		# On envoie la sauce !
@@ -194,7 +193,7 @@ def Envoyer():
 		#if envoiState:
 		#	Envoyer_Trame()
 		print('FTDI non détecté')
-
+	"""
 
 ##############################################################
 # Fonction pour actualiser l'affichage du cube (Auteur : Léo)

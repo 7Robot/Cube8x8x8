@@ -5,7 +5,7 @@
 space_defender.py
  ______  _____      _           _
 |___   || ___ \    | |         | |
-    / / | |_/ /___ | |__   ___ | |_
+	/ / | |_/ /___ | |__   ___ | |_
    / /  |    // _ \|  _ \ / _ \|  _|
   / /   | |\ \ (_) | |_) | (_) | |_
  /_/    |_| \_\___/|____/ \___/ \__|
@@ -36,7 +36,10 @@ Cube8x8x8
 import sys
 import os						# Sauver des fichiers (scores)
 from math import *				# Utilisation de fonctions mathématiques
-from serial import *			# Communication avec le port série 
+# Ancienne librairie :
+from pylibftdi import Device
+# Nouvelle librairie :
+# from serial import * 
 from collections import deque 	# Opérations avancés sur les listes (rotate)
 from random import randint    	# Entiers aléatoires
 from time import sleep			# Pauses dans le programme
@@ -120,6 +123,7 @@ class Vaisseau():
 		self.position=[4,3]
 		self.bonus_available=0
 		self.bonus_count=0
+		self.liste_tirs=[]
 
 	def move(self,direction):	
 		if (direction == 'Up'):
@@ -134,11 +138,13 @@ class Vaisseau():
 	def fire(self):
 		# Si des tirs bonus sont disponibles
 		if (self.bonus_count>0):
+			self.liste_tirs.append(LaserFat())
 			laser_fat.play()
 			# On enlève un tir bonus
 			self.bonus_count-=1	
 		# Si on n'a pas de tir bonus en stock	
 		else:
+			self.liste_tirs.append(Laser())
 			laser.play()
 
 	# Cette fonction est appellée par la touche "q" si des bonus sont disponibles
@@ -153,18 +159,33 @@ class Attaquant():
 		global dimension
 		# Position initiale aléatoire de l'attaquant dans le dernier plan du cube ([etage, ligne, colonne])
 		self.position=[randint(0, dimension-1),0,randint(0, dimension-1)]
+		self.vitesse=randint(45, 55)-4*NouvellePartie.difficulty
+	def move(self,i):
+		if i%int(self.vitesse/10)==0:
+			self.position[1]+=1	
 	def __del__(self):
 		shot.play()
 
 class Tir():
 	def __init__(self):
-		self.position=NouveauVaisseau.position
+		self.position=[0,7,0]
+		self.position[0]=NouveauVaisseau.position[0]
+		self.position[2]=NouveauVaisseau.position[1]
+		self.vitesse=50-4*9
+	def move(self,i):
+		if i%int(self.vitesse/10)==0:
+			self.position[1]-=1
+
 class Laser(Tir):
 	def __init__(self):
-		Tir.__init()
+		Tir.__init__(self)
+		super(Laser, self).__init__()
+
+
 class LaserFat(Tir):
 	def __init__(self):
-		Tir.__init()
+		#Tir.__init__(self)
+		super(LaserFat, self).__init__()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~ Thread parallèle de partie en cours ~~~~~~~~~~~
@@ -175,12 +196,26 @@ def PartieEnCours():
 	i=0
 	while True:
 		while NouvellePartie.pause==0:
-			if i%int(50-4*NouvellePartie.difficulty)==0:
-				print('test')
-
+			l=0
+			# On fait avancer les attaquants
+			while l < len(NouvellePartie.liste_attaquants):
+				if NouvellePartie.liste_attaquants[l].position[1]<7:
+					NouvellePartie.liste_attaquants[l].move(i)
+					l+=1
+				else:
+					del NouvellePartie.liste_attaquants[l]
+			l=0		
+			# On fait avancer les tirs
+			while l < len(NouveauVaisseau.liste_tirs):
+				if NouveauVaisseau.liste_tirs[l].position[1]>0:
+					NouveauVaisseau.liste_tirs[l].move(i)
+					l+=1
+				else:
+					del NouveauVaisseau.liste_tirs[l]
+			# On actualise et envoie l'image 3D du cube
 			Envoyer()
 			i+=1
-			sleep(0.01)
+			sleep(0.2)
 		sleep(0.1)		
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -205,8 +240,7 @@ def Touche(event):
 
 		# Touche de tir	
 		if 	(event.keysym=='f'):
-			NouveauVaisseau.fire()
-
+			NouveauVaisseau.fire()	
 		# Si un bonus est disponible, on l'active avec la touche "q"	
 		if 	(event.keysym=='q' and NouveauVaisseau.bonus_available!=0):
 			NouveauVaisseau.use_bonus()
@@ -220,6 +254,9 @@ def Touche(event):
 			NouvellePartie.liste_attaquants.append(Attaquant())
 			print(len(NouvellePartie.liste_attaquants))
 			print(NouveauVaisseau.position)
+
+		if 	(event.keysym=='t'):
+			NouvellePartie.liste_attaquants.append(Attaquant())
 		#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#CHEAT#	
 
 	# Si on presse espace et qu'on n'a pas perdu on se met en pause ou on en sort
@@ -254,6 +291,10 @@ def Envoyer():
 				for l in range(len(NouvellePartie.liste_attaquants)):
 					if NouvellePartie.liste_attaquants[l].position==[k, i, j]:	
 						M[i+dimension*k][j]=2
+				# Détection des tirs
+				for l in range(len(NouveauVaisseau.liste_tirs)):
+					if NouveauVaisseau.liste_tirs[l].position==[k, i, j]:	
+						M[i+dimension*k][j]=1
 
 	octets_rouges=[]				
 	octets_bleus=[]
@@ -287,6 +328,23 @@ def Envoyer():
 					octets_rouges[k][i] = octets_rouges[k][i]+2**j
 					octets_bleus[k][i] = octets_bleus[k][i]+2**j
 
+	######## Avec l'ancienne librairie pylibftdi ########
+	try:
+		# On envoie la sauce !
+		with Device (mode = 't') as dev:
+			dev.baudrate = 115200
+
+			# 8 étages
+			for k in range(dimension) :
+				# 8 PICs = 8 lignes bicolores
+				for i in range (dimension) :
+					dev.write(chr(octets_bleus[k][i]))
+					dev.write(chr(octets_rouges[k][i]))
+	except Exception:	
+		print('FTDI non détecté')
+
+	"""
+	######## Avec la nouvelle librairie pyserial ########
 	try:
 		# On envoie la sauce !
 		dev = Serial('/dev/ttyUSB0', 115200)
@@ -297,53 +355,60 @@ def Envoyer():
 				dev.write(chr(octets_bleus[k][i]).encode())
 				dev.write(chr(octets_rouges[k][i]).encode())
 	except Exception:	
-		#if envoiState:
-		#	Envoyer_Trame()
 		print('FTDI non détecté')
-		
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~ Gestion de l'audio ~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	"""
+	
 
-# Initialize the pygame mixer
-mixer.init(44100)
-try:
-    # Create the sound instances
-    music = mixer.Sound("Sound/E1M1.wav")
-    woosh = mixer.Sound("Sound/woosh.wav")
-    laser = mixer.Sound("Sound/laser.wav") 
-    laser_fat = mixer.Sound("Sound/laser_fat.wav")
-    shot = mixer.Sound("Sound/shot.wav")
+# Ce qui est sous le if est executé que si on lance directement le script
+# mais pas dans le cas d'un import :
+if __name__ == '__main__':
 
-except:
-    print("Error: Sound file not found")
+	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	# ~~~~~~~~~~~~~~~~~~~ Gestion de l'audio ~~~~~~~~~~~~~~~~~~~
+	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~ Fenêtre principale ~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	
+	# Initialize the pygame mixer
+	mixer.init(44100)
+	try:
+		# Create the sound instances
+		music = mixer.Sound("Sound/E1M1.wav")
+		woosh = mixer.Sound("Sound/woosh.wav")
+		laser = mixer.Sound("Sound/laser.wav") 
+		laser_fat = mixer.Sound("Sound/laser_fat.wav")
+		shot = mixer.Sound("Sound/shot.wav")
 
-Mafenetre = Tk()
-Mafenetre.title('Space Defender')
+	except:
+		print("Error: Sound file not found")
 
-# Un appui sur le clavier appelle la fonction Touche()
-Mafenetre.bind('<Key>', Touche)
+	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	# ~~~~~~~~~~~~~~~~~~~ Fenêtre principale ~~~~~~~~~~~~~~~~~~~
+	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	
 
-# Indication du joueur et du niveau en cours
-PlayerLevel = Label(Mafenetre, text="Créer une nouvelle partie :", justify=LEFT) 
-PlayerLevel.grid(padx=30, pady=5)
+	Mafenetre = Tk()
+	Mafenetre.title('Space Defender')
 
-def NouvPart(event):
-	woosh.play()
-	global NouvellePartie
-	NouvellePartie=Partie()
-	global NouveauVaisseau
-	NouveauVaisseau=Vaisseau()
-	Thread(None, PartieEnCours).start()
+	# Un appui sur le clavier appelle la fonction Touche()
+	Mafenetre.bind('<Key>', Touche)
 
-BoutonNouvPart = Button(Mafenetre, text = "Nouvelle Partie")
-BoutonNouvPart.bind("<Button-1>", NouvPart)
-Mafenetre.bind("<Return>", NouvPart)
-BoutonNouvPart.grid(padx=30, pady=5)
+	# Indication du joueur et du niveau en cours
+	PlayerLevel = Label(Mafenetre, text="Créer une nouvelle partie :", justify=LEFT) 
+	PlayerLevel.grid(padx=30, pady=5)
 
-Mafenetre.mainloop()
+	def NouvPart(event):
+		woosh.play()
+		global NouvellePartie
+		NouvellePartie=Partie()
+		global NouveauVaisseau
+		NouveauVaisseau=Vaisseau()
+		Thread(None, PartieEnCours).start()
+
+	BoutonNouvPart = Button(Mafenetre, text = "Nouvelle Partie")
+	BoutonNouvPart.bind("<Button-1>", NouvPart)
+	Mafenetre.bind("<Return>", NouvPart)
+	BoutonNouvPart.grid(padx=30, pady=5)
+
+	Mafenetre.mainloop() 
+	NouvellePartie.pause=1
+	Thread(None, PartieEnCours)._stop() 
+	music.stop()  
 
