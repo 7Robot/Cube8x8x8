@@ -8,6 +8,15 @@
 
 Projet cube8x8x8
 ================
+Depot du cube led 8X8X8.
+Contenu :
+-code des pics (18F25K80)
+-scripts pour le faire fonctionner !
+
+
+
+
+
 
 Organisation des trames :
 
@@ -26,8 +35,8 @@ Installation
 
 Sous Archlinux :
 
-	yaourt pyserial
+	pacman -S python-pyserial
 
 Sous Debian et dérivés :
 
-	sudo apt-get install pyserial
+	apt-get install pyserial
