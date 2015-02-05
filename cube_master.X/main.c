@@ -94,7 +94,7 @@ char tampon = 0;
 int compteur_isr = 0;
 char compteur_clock = 0;
 char flag_reception = 0;
-char stockage_uart[140] = 0;
+char stockage_uart[140] = {0};
 
 void interrupt low_priority high_isr(void) { // interruption de l'UART
 
@@ -191,7 +191,7 @@ void multiplexeur(char n) {
 
         case 7:
             etage6 = 0;
-            for (a = 0; a < 16; a++) {
+            for (a = 0; a =< 16; a++) {
                 writeDataToUART(stockage_uart[a + 16 * n]);
             }
             etage7 = 1;
