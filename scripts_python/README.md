@@ -15,9 +15,9 @@ Installation
 ================
 Paquets requis :
 
-Communication avec le ftdi :
-python-pylibftdi
-Gestion de l'audio des jeux :
-python-pygame-hg
-Gestion de l'interface graphique :
+* Communication avec le ftdi :  
+python-pylibftdi  
+* Gestion de l'audio des jeux :  
+python-pygame-hg  
+* Gestion de l'interface graphique :  
 tk
