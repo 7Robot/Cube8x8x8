@@ -13,6 +13,9 @@ Exécuter home.py pour avoir accès aux différents scripts élaborés.
 
 Installation
 ================
+
+#### /!\ Ne fonctionne qu'en Python 3 /!\
+
 Paquets requis :
 
 * Communication avec le ftdi :  
