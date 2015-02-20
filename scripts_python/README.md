@@ -10,3 +10,14 @@ Scripts Python
 ================
 
 Exécuter home.py pour avoir accès aux différents scripts élaborés.
+
+Installation
+================
+Paquets requis :
+
+Communication avec le ftdi :
+python-pylibftdi
+Gestion de l'audio des jeux :
+python-pygame-hg
+Gestion de l'interface graphique :
+tk
