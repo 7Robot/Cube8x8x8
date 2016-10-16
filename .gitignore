@@ -1,1 +1,4 @@
 scores.txt
+
+#les fichiers temporaires
+*.swp
