@@ -21,6 +21,7 @@ Created by Robin Beilvert
 import sys
 import os	
 
+
 # Bibliothèque pour interface graphique
 try:
 	# for Python2
@@ -38,17 +39,17 @@ def Touche(event):
 def Open_display_commands():
 	Mafenetre.destroy()		
 	os.chdir('DisplayCommands/')
-	os.system('python display_commands.py')
+	os.system('py display_commands.py')
 
 def Open_snake():
 	Mafenetre.destroy()		
 	os.chdir('Snake3D/')
-	os.system('python snake.py')
+	os.system('py snake.py')
 
 def Open_space_defender():
 	Mafenetre.destroy()		
 	os.chdir('SpaceDefender/')
-	os.system('python space_defender.py')
+	os.system('py space_defender.py')
 
 # ~~~~~~~~~~~ Création de la fenêtre principale ~~~~~~~~~~~~~~
 

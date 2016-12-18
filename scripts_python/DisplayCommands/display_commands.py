@@ -373,6 +373,7 @@ def Envoyer():
 
 	 	
 	######## Avec l'ancienne librairie pylibftdi ########
+	"""
 	try:
 		# On envoie la sauce !
 		with Device (mode = 't') as dev:
@@ -391,8 +392,9 @@ def Envoyer():
 	
 	"""
 	try:
+	
 		# On envoie la sauce !
-		dev = Serial('/dev/ttyUSB0', 115200)
+		dev = Serial('/dev/ttyUSB0', 9600)
 		# 8 étages
 		for k in range(etages) :
 			# 8 PICs = 8 lignes bicolores
@@ -403,7 +405,7 @@ def Envoyer():
 		#if envoiState:
 		#	Envoyer_Trame()
 		print('FTDI non détecté')
-	"""
+	
 def Init():
 
 	##################################### Initialisation des étages #####################################
