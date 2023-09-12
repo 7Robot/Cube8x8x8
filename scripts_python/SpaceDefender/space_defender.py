@@ -1,6 +1,3 @@
-#!/usr/bin/env python 
-# -*- coding: utf8 -*-
-
 """
 space_defender.py
  ______  _____      _           _
@@ -36,10 +33,7 @@ Cube8x8x8
 import sys
 import os						# Sauver des fichiers (scores)
 from math import *				# Utilisation de fonctions mathématiques
-# Ancienne librairie :
-from pylibftdi import Device
-# Nouvelle librairie :
-# from serial import * 
+from serial import * 
 from collections import deque 	# Opérations avancés sur les listes (rotate)
 from random import randint    	# Entiers aléatoires
 from time import sleep			# Pauses dans le programme

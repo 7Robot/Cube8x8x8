@@ -1,6 +1,3 @@
-#!/usr/bin/env python 
-# -*- coding: utf8 -*-
-
 #######################################
 #                                     # 
 #    ###                              #
@@ -37,10 +34,7 @@
 import sys
 import os					  # Permet de sauver des fichiers (scores)
 from math import *
-# Ancienne librairie :
-from pylibftdi import Device
-# Nouvelle librairie :
-# from serial import * 
+from serial import * 
 from collections import deque # Permet de faires des opérations avancés sur les listes (rotate)
 from random import randint    # Permet de créer des chiffres aléatoires
 from time import sleep
@@ -161,24 +155,6 @@ def Envoyer():
 					octets_rouges[k][i] = octets_rouges[k][i]+2**j
 					octets_bleus[k][i] = octets_bleus[k][i]+2**j
 	
-	######## Avec l'ancienne librairie pylibftdi ########
-	try:
-		# On envoie la sauce !
-		with Device (mode = 't') as dev:
-			dev.baudrate = 115200
-
-			# 8 étages
-			for k in range(dimension) :
-				# 8 PICs = 8 lignes bicolores
-				for i in range (dimension) :
-					dev.write(chr(octets_bleus[k][i]))
-					dev.write(chr(octets_rouges[k][i]))
-	except Exception:	
-		#if envoiState:
-		#	Envoyer_Trame()
-		print('FTDI non détecté')
-
-	"""
 	######## Avec la nouvelle librairie pyserial ########
 	try:
 		# On envoie la sauce !
@@ -193,7 +169,7 @@ def Envoyer():
 		#if envoiState:
 		#	Envoyer_Trame()
 		print('FTDI non détecté')
-	"""
+
 
 ##############################################################
 # Fonction pour actualiser l'affichage du cube (Auteur : Léo)

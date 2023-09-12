@@ -24,3 +24,14 @@ python-pylibftdi
 python-pygame-hg  
 * Gestion de l'interface graphique :  
 tk
+
+### Troubleshooting
+
+```shell
+[Errno 13] could not open port /dev/ttyUSB0: [Errno 13] Permission denied: '/dev/ttyUSB0'
+```
+
+Give read and write privileges to `/dev/ttyUSB0` after the cube is plugged in with:
+```shell
+sudo chmod 666 /dev/ttyUSB0
+```

@@ -1,6 +1,3 @@
-#!/usr/bin/env python 
-# -*- coding: utf8 -*-
-
 """
 script interface_souris_ftdi_PCtoPIC.py
  ______  _____      _           _
@@ -20,10 +17,7 @@ Created by Robin Beilvert, 3 lines written by Alexandre Proux and Felix is watch
 import sys
 from math import *
 
-##### Ancienne librairie #####
-from pylibftdi import Device
-##### Nouvelle librairie #####
-# from serial import * 
+from serial import * 
 
 from time import sleep
 
@@ -365,46 +359,25 @@ def Envoyer():
 					octets_bleus[k][i] = octets_bleus[k][i]+2**j
 
 
-	#print ("On verifie les octets envoyés aux PICs :")
-	#print ("Premier octet bleu = %s" % bin(octets_bleus[0][0]))	
-	#print ("Premier octet rouge = %s" % bin(octets_rouges[0][0]))
-	#print ("Second octet bleu = %s" % bin(octets_bleus[0][1]))	
-	#print ("Second octet rouge = %s" % bin(octets_rouges[0][1]))
+	# print("On verifie les octets envoyés aux PICs :")
+	# print("Premier octet bleu = %s" % bin(octets_bleus[0][0]))	
+	# print("Premier octet rouge = %s" % bin(octets_rouges[0][0]))
+	# print("Second octet bleu = %s" % bin(octets_bleus[0][1]))	
+	# print("Second octet rouge = %s" % bin(octets_rouges[0][1]))
 
-	 	
-	######## Avec l'ancienne librairie pylibftdi ########
-	"""
 	try:
+		dev = Serial('/dev/ttyUSB0', 115200)
 		# On envoie la sauce !
-		with Device (mode = 't') as dev:
-			dev.baudrate = 115200
-
-			# 8 étages
-			for k in range(etages) :
-				# 8 PICs = 8 lignes bicolores
-				for i in range (lignes) :
-					dev.write(chr(octets_bleus[k][i]))
-					dev.write(chr(octets_rouges[k][i]))
-	except Exception:	
-		#if envoiState:
-		#	Envoyer_Trame()
-		print('FTDI non détecté')
-	
-	"""
-	try:
-	
-		# On envoie la sauce !
-		dev = Serial('/dev/ttyUSB0', 9600)
 		# 8 étages
 		for k in range(etages) :
 			# 8 PICs = 8 lignes bicolores
-			for i in range (lignes) :
+			for i in range (lignes):
 				dev.write(chr(octets_bleus[k][i]).encode())
 				dev.write(chr(octets_rouges[k][i]).encode())
-	except Exception:	
+	except Exception as error:	
 		#if envoiState:
 		#	Envoyer_Trame()
-		print('FTDI non détecté')
+		print(f'FTDI non détecté: {error}')
 	
 def Init():
 

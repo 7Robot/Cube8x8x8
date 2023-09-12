@@ -1,6 +1,3 @@
-#!/usr/bin/env python 
-# -*- coding: utf8 -*-
-
 """
 home.py
  ______  _____      _           _
@@ -39,17 +36,17 @@ def Touche(event):
 def Open_display_commands():
 	Mafenetre.destroy()		
 	os.chdir('DisplayCommands/')
-	os.system('py display_commands.py')
+	os.system('python display_commands.py')
 
 def Open_snake():
 	Mafenetre.destroy()		
 	os.chdir('Snake3D/')
-	os.system('py snake.py')
+	os.system('python snake.py')
 
 def Open_space_defender():
 	Mafenetre.destroy()		
 	os.chdir('SpaceDefender/')
-	os.system('py space_defender.py')
+	os.system('python space_defender.py')
 
 # ~~~~~~~~~~~ Création de la fenêtre principale ~~~~~~~~~~~~~~
 
