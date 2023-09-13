@@ -1,4 +1,10 @@
-scores.txt
+**/__pycache__/
 
-#les fichiers temporaires
+# PyCharm projet settings
+.idea/
+# Fichiers temporaires
 *.swp
+# Local envs
+venv/
+
+**/scores.txt

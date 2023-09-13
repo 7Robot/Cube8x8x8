@@ -44,7 +44,6 @@ void initComms()
    //SPBRG = 51;   // 19200
    //SPBRG2 = 12;
 
-
     SPBRG = 115;  // 115200  // On suppose que FCY = 64 000 000
     SPBRGH2 = 0;
     SPBRG2 = 137;

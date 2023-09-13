@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "port.h"
-//#include "delays.h"
 #include "usart.h"
 
 
@@ -30,35 +29,35 @@
 //Pin 27 (TX2) - Debug UART TX
 //Pin 28 (RX2) - Debug UART RX
 
-#define nADDR0                          RA0
-#define nADDR1                          RA1
-#define nADDR2                          RA2
-#define nADDR3                          RA3
+#define nADDR0                 RA0
+#define nADDR1                 RA1
+#define nADDR2                 RA2
+#define nADDR3                 RA3
 
-#define VREF_CHANNEL                    0
+#define VREF_CHANNEL           0
 
-#define SENSOR_A_CHANNEL                10
-#define THRESHOLD_A_CHANNEL             8
-#define LOW_LED_A                       RC4
-#define HIGH_LED_A                      RC3
-#define OUTPUT_A                        RB5
+#define SENSOR_A_CHANNEL       10
+#define THRESHOLD_A_CHANNEL    8
+#define LOW_LED_A              RC4
+#define HIGH_LED_A             RC3
+#define OUTPUT_A               RB5
 
-#define SENSOR_B_CHANNEL                9
-#define THRESHOLD_B_CHANNEL             4
-#define LOW_LED_B                       RC1
-#define HIGH_LED_B                      RC0
-#define OUTPUT_B                        RC2
+#define SENSOR_B_CHANNEL       9
+#define THRESHOLD_B_CHANNEL    4
+#define LOW_LED_B              RC1
+#define HIGH_LED_B             RC0
+#define OUTPUT_B               RC2
 
-#define BUS_DE                          RB2
-#define nBUS_RE                         RB3
+#define BUS_DE                 RB2
+#define nBUS_RE                RB3
 
-#define SPARE                           RC5
+#define SPARE                  RC5
 
-#define TRUE                1
-#define FALSE               0
+#define TRUE    1
+#define FALSE   0
 
-#define ON              1
-#define OFF                 0
+#define ON      1
+#define OFF     0
 
 
 
