@@ -1,13 +1,5 @@
-#!/usr/bin/env python3
+from serial import Serial
 
-import sys, math
-from time import sleep
-from pylibftdi import Device
-
-
-with Device (mode = 't') as dev:
-	dev.baudrate = 115200
-	dev.write(chr(255))
-	dev.write(chr(255))
-		
-	
+ser = Serial("/dev/ttyUSB0", 115200)
+ser.write((255).to_bytes())
+ser.write((255).to_bytes())

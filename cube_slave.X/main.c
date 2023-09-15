@@ -4,7 +4,7 @@
 // 7ROBOT
 // Created by Alexandre Proux & Robin Beilvert
 // Cube 8x8x8
-//============================================================github=============
+//=============================================================================
 //
 //
 //=============================================================================
@@ -100,7 +100,6 @@
 #define ledR8 PORTCbits.RC4
 
 
-
 char tampon = 0;
 char MASK[8] = {0b10000000, 0b01000000, 0b00100000, 0b00010000, 0b00001000, 0b00000100, 0b00000010, 0b00000001};
 char stock_led[20] = 0;
@@ -110,24 +109,22 @@ char state_clock = 0;
 char led_state[2][8] = 0; // Ligne 0 : Bleu, Ligne 1 : Rouge
 
 void interrupt low_priority high_isr(void) {
-    if (RC2IF) {
-        tampon = RCREG2; //a chaque interruption
-        if (compteur == 16) { //on stock la valeur de
-            compteur = 0; //RCREG2 dans un tableau
+    if (RC2IF) { // a chaque interruption on stock la valeur de RCREG2 dans un tableau
+        tampon = RCREG2;
+        if (compteur == 16) {
+            compteur = 0;
         }
         stock_led[compteur] = tampon;
         compteur++;
     }
-    RC2IF = 0; // On remet le flag a  0
+    RC2IF = 0; // On remet le flag a 0
 }
 
 
 void main(void) {
-
     initPorts(); // Initialize ports to startup state
     initComms(); // Initialize the serial port
     while (1) {
-        
         decodage();
         affichage();
     }

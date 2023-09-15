@@ -4,7 +4,7 @@
 // 7ROBOT
 // Created by Alexandre Proux & Robin Beilvert
 // Cube 8x8x8
-//============================================================github=============
+//=============================================================================
 //
 //
 //=============================================================================
@@ -23,9 +23,9 @@
 
 // CONFIG1H
 #pragma config FOSC = INTIO2    // Oscillator (Internal RC oscillator)
-#pragma config PLLCFG = ON    // PLL x4 Enable bit (Disabled)
+#pragma config PLLCFG = ON      // PLL x4 Enable bit (Disabled)
 #pragma config FCMEN = OFF      // Fail-Safe Clock Monitor (Disabled)
-#pragma config IESO = ON       // Internal External Oscillator Switch Over Mode (Disabled)
+#pragma config IESO = ON        // Internal External Oscillator Switch Over Mode (Disabled)
 
 // CONFIG2L
 #pragma config PWRTEN = OFF     // Power Up Timer (Disabled)
@@ -78,21 +78,21 @@
 
 
 // DEFINE LISTE
-#define etage0  PORTCbits.RC0
-#define etage1  PORTCbits.RC1
-#define etage2  PORTCbits.RC3
-#define etage3  PORTCbits.RC2
-#define etage4  PORTCbits.RC5
-#define etage5  PORTCbits.RC4
-#define etage6  PORTCbits.RC6
-#define etage7  PORTCbits.RC7
+#define level0  PORTCbits.RC0
+#define level1  PORTCbits.RC1
+#define level2  PORTCbits.RC3
+#define level3  PORTCbits.RC2
+#define level4  PORTCbits.RC5
+#define level5  PORTCbits.RC4
+#define level6  PORTCbits.RC6
+#define level7  PORTCbits.RC7
 
 #define clock PORTAbits.RA0
 
 // GLOBAL
 char tampon = 0;
 int compteur_isr = 0;
-char compteur_clock = 0;
+char level = 0;
 char flag_reception = 0;
 char stockage_uart[140] = {0};
 
@@ -112,91 +112,79 @@ void interrupt low_priority high_isr(void) { // interruption de l'UART
 
 void main(void) {
     //char msg1[80] = "MASTER IS READY \n \r";
-    char mux = 0;
-    long i = 0;
+    long d = 0;
+
+    // Init delay
+    for (d = 0; d < 10000; d++) {
+    }
+
     initPorts(); // Initialize ports to startup state
     initComms(); // Initialize the serial port
-    int delaimain = 0;
 
     while (1) {
-        if (compteur_clock == 8) {
-            compteur_clock = 0;
+        for (level = 0; level < 8; level++) {
+            multiplexeur(level);
+            for (d = 0; d < 750; d++) {
+            }
         }
-        multiplexeur(compteur_clock);
-        compteur_clock++;
     }
 }
 
-void multiplexeur(char n) {
-    long d = 0;
+void forwardDataToSlaves(char level){
     char a = 0;
+    for (a = 0; a < 16; a++) {
+        writeDataToUART(stockage_uart[a + 16 * level]);
+    }
+}
 
-    switch (n) {
-
+void multiplexeur(char level) {
+    switch (level) {
         case 0:
-            etage7 = 0;
-            for (a = 0; a < 16; a++) {
-                writeDataToUART(stockage_uart[a + 16 * n]);
-            }
-            etage0 = 1;
+            level7 = 0;
+            forwardDataToSlaves(level)
+            level0 = 1;
             break;
 
         case 1:
-            etage0 = 0;
-            for (a = 0; a < 16; a++) {
-                writeDataToUART(stockage_uart[a + 16 * n]);
-            }
-            etage1 = 1;
+            level0 = 0;
+            forwardDataToSlaves(level)
+            level1 = 1;
             break;
 
         case 2:
-            etage1 = 0;
-            for (a = 0; a < 16; a++) {
-                writeDataToUART(stockage_uart[a + 16 * n]);
-            }
-            etage2 = 1;
+            level1 = 0;
+            forwardDataToSlaves(level)
+            level2 = 1;
             break;
 
         case 3:
-            etage2 = 0;
-            for (a = 0; a < 16; a++) {
-                writeDataToUART(stockage_uart[a + 16 * n]);
-            }
-            etage3 = 1;
+            level2 = 0;
+            forwardDataToSlaves(level)
+            level3 = 1;
             break;
 
         case 4:
-            etage3 = 0;
-            for (a = 0; a < 16; a++) {
-                writeDataToUART(stockage_uart[a + 16 * n]);
-            }
-            etage4 = 1;
+            level3 = 0;
+            forwardDataToSlaves(level)
+            level4 = 1;
             break;
 
         case 5:
-            etage4 = 0;
-            for (a = 0; a < 16; a++) {
-                writeDataToUART(stockage_uart[a + 16 * n]);
-            }
-            etage5 = 1;
+            level4 = 0;
+            forwardDataToSlaves(level)
+            level5 = 1;
             break;
 
         case 6:
-            etage5 = 0;
-            for (a = 0; a < 16; a++) {
-                writeDataToUART(stockage_uart[a + 16 * n]);
-            }
-            etage6 = 1;
+            level5 = 0;
+            forwardDataToSlaves(level)
+            level6 = 1;
             break;
 
         case 7:
-            etage6 = 0;
-            for (a = 0; a =< 16; a++) {
-                writeDataToUART(stockage_uart[a + 16 * n]);
-            }
-            etage7 = 1;
+            level6 = 0;
+            forwardDataToSlaves(level)
+            level7 = 1;
             break;
-    }
-    for (d = 0; d < 750; d++) {
     }
 }
